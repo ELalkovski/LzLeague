@@ -1,0 +1,21 @@
+﻿@using LzLeague.Models
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@{
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+}
+
+<div class="col-md-6">
+    <div class="row">
+        <a asp-page="./Index">Profile</a>
+    </div>
+    <div class="row">
+        <a id="change-password" asp-page="./ChangePassword">Password</a>
+    </div>
+    <div class="row">
+        <a id="external-login" asp-page="./ExternalLogins">External logins</a>
+    </div>
+    <div class="row">
+        <a asp-page="./PersonalData">Personal data</a>
+    </div>
+</div>

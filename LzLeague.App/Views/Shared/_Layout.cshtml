@@ -1,0 +1,183 @@
+﻿@using System.Security.Claims
+
+@{
+    bool isAdmin = User.IsInRole("Admin");
+    bool isLoggedUser = User.IsInRole("User");
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - LzLeague</title>
+
+    <environment include="Development">
+        <!-- Bootstrap core CSS-->
+        <link href="~/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="~/css/site.css" />
+        <link href="~/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
+        <!-- Page level plugin CSS-->
+        <link href="~/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+
+        <!-- Custom styles for this template-->
+        <link href="~/css/sb-admin.css" rel="stylesheet">
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+
+        <link href="~/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
+        <!-- Page level plugin CSS-->
+        <link href="~/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+
+        <!-- Custom styles for this template-->
+        <link href="~/css/sb-admin.css" rel="stylesheet">
+    </environment>
+</head>
+<body id="page-top">
+    <nav class="navbar navbar-expand navbar-dark static-top @(isAdmin ? "admin-nav-colors" : "bg-dark")">
+        <a class="navbar-brand mr-1" asp-area="" asp-controller="Home" asp-action="Index">Lz League</a>
+        <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- Navbar -->
+        <ul class="navbar-nav ml-auto">
+            @if (User.Identity.IsAuthenticated)
+            {
+                <li class="nav-link">Hello @(isAdmin ? "Admin" : User.Identity.Name)!</li>
+                <li class="nav-item dropdown no-arrow">
+                    @if (isAdmin)
+                    {
+                        <a class="nav-link dropdown-toggle" href="#" id="adminManage" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-fw fa-cogs"></i>
+                        </a>
+                    }
+                    <div class="dropdown-menu" aria-labelledby="adminManage">
+                        <a class="dropdown-item" asp-area="Admin" asp-controller="Users" asp-action="Index">Users</a>
+                        <a class="dropdown-item" asp-area="Admin" asp-controller="Teams" asp-action="Index">Teams</a>
+                        <a class="dropdown-item" asp-area="Admin" asp-controller="Matches" asp-action="Index">Matches</a>
+                    </div>
+                </li>
+            }
+            <li class="nav-item dropdown no-arrow">
+                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    <i class="fas fa-user-circle fa-fw"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                    <partial name="_LoginPartial" />
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    <partial name="_CookieConsentPartial" />
+
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <ul id="sidebar" class="sidebar navbar-nav @(isAdmin ? "admin-sidebar-colors" : "")">
+            <li class="nav-item">
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="nav-link">
+                    <i class="fas fa-fw fa-home"></i>
+                    <span>Home</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="charts.html">
+                    <i class="fas fa-fw fa-newspaper"></i>
+                    <span>News</span>
+                </a>
+            </li>
+            @if (isLoggedUser)
+            {
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="Predictions" asp-action="UserPrediction">
+                        <i class="fas fa-fw fa-calculator"></i>
+                        <span>My Prediction</span>
+                    </a>
+                </li>
+            }
+            <li class="nav-item">
+                <a class="nav-link" asp-area="Admin" asp-controller="Matches" asp-action="Index">
+                    <i class="far fa-fw fa-futbol"></i>
+                    <span>Program</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-area="" asp-controller="Predictions" asp-action="UsersStandings">
+                    <i class="fas fa-fw fa-sort-numeric-down"></i>
+                    <span>Standings</span>
+                </a>
+            </li>
+            @if (isAdmin)
+            {
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="adminManage" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-fw fa-cogs"></i>
+                        <span>Manage</span>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="adminManage">
+                        <a class="dropdown-item" asp-area="Admin" asp-controller="Users" asp-action="Index">Users</a>
+                        <a class="dropdown-item" asp-area="Admin" asp-controller="Teams" asp-action="Index">Teams</a>
+                        <a class="dropdown-item" asp-area="Admin" asp-controller="Matches" asp-action="Index">Matches</a>
+                    </div>
+                </li>
+            }
+        </ul>
+
+        <div id="content-wrapper">
+            <div class="container-fluid">
+                @RenderBody()
+            </div>
+            <footer class="sticky-footer">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright © Flyelmos, EL 2018</span>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <environment include="Development">
+        <!-- Bootstrap core JavaScript-->
+        <script src="~/vendor/jquery/jquery.min.js"></script>
+        <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
+                asp-fallback-src="~/vendor/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
+        </script>
+        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
+                asp-fallback-src="~/vendor/bootstrap/dist/js/bootstrap.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                crossorigin="anonymous"
+                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
+        </script>
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+    </environment>
+
+    <!-- Core plugin JavaScript-->
+    <script src="~/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Page level plugin JavaScript-->
+    @*<script src="~/vendor/chart.js/Chart.min.js"></script>*@
+    <script src="~/vendor/datatables/jquery.dataTables.js"></script>
+    <script src="~/vendor/datatables/dataTables.bootstrap4.js"></script>
+    <!-- Custom scripts for all pages-->
+    <script src="~/js/sb-admin.min.js"></script>
+    <!-- Demo scripts for this page-->
+    <script src="~/js/demo/datatables-demo.js"></script>
+    <script src="~/js/pop-up-msg.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

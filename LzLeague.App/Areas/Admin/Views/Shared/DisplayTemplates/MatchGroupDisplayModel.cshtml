@@ -1,0 +1,14 @@
+﻿@model LzLeague.Common.AdminBindingModels.MatchGroupDisplayModel
+
+<table class="table table-striped shadow-lg table-responsive-sm" style="margin-top: 1em">
+    <thead>
+    <tr>
+        <th style="border: 0">
+            <h5><b>@Model.Date.Value.ToString("yyyy MMMM dd")</b></h5>
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    @Html.DisplayFor(m => m.Matches)
+    </tbody>
+</table>

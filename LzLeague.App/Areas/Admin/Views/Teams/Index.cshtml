@@ -1,0 +1,53 @@
+﻿@model ICollection<LzLeague.Common.AdminBindingModels.GroupBindingModel>
+@{
+    ViewData["Title"] = "Groups and Teams";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row" style="margin-top: 20px; margin-bottom: 20px">
+    <div class="col-md-6 col-xs-2 offset-md-1">
+        <h2>@ViewData["Title"]</h2>
+        <div id="success-msg-teams" class="alert alert-success" style="display: none">
+        </div>
+        <hr />
+        <br />
+        @Html.DisplayFor(model => model)
+    </div>
+    <div class="col-md-2 offset-md-1">
+        <div class="card">
+            <div class="card-header admin-header d-flex justify-content-center">
+                <h5><b>Actions</b></h5>
+            </div>
+            <div class="card-body">
+                <div class="row d-flex justify-content-center">
+                    <a class="btn btn-success" asp-area="Admin" asp-controller="Teams" asp-action="Add">Add New Team</a>
+                </div>
+                <br />
+                <div class="row d-flex justify-content-center" >
+                    <a style="width: 8.2em" class="btn btn-danger" asp-area="Admin" asp-controller="Teams" asp-action="Delete">Delete Team</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-3 offset-md-8">
+        <button id="go-top-btn" class="btn btn-info">
+            <i class="fas fa-chevron-circle-up"></i>
+        </button>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        let successMsg = '@TempData["SuccessMsg"]';
+        displayMsg(successMsg, 'success-msg-teams');
+
+        $('#go-top-btn').click(function() {
+            $(document).scrollTop(0);
+        });
+    </script>
+}

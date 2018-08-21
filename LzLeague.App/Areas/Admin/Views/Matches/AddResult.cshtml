@@ -1,0 +1,96 @@
+﻿@model LzLeague.Common.AdminBindingModels.AddResultBindingModel
+@{
+    ViewData["Title"] = "Add Match Result";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row" style="margin-top: 2em; margin-bottom: 20px">
+    <div class="col-md-6 offset-md-3">
+        <div class="card shadow-lg bg-white rounded">
+            <div class="card-header admin-header">
+                Add Match Result
+            </div>
+            <div id="warning-msg-results" class="alert alert-danger" style="display: none">
+            </div>
+            <div class="card-body">
+                <form asp-area="Admin" asp-controller="Matches" asp-action="AddResult" method="post">
+                    <div class="form-group">
+                        <b><label asp-for="GroupId">Group</label></b>
+                        <select class="form-control" id="groups-select-results"
+                                asp-for="GroupId" asp-items="@(new SelectList(Model.AvailableGroups, "Id", "Name"))">
+                            <option>Please select a group...</option>
+                        </select>
+                        <span asp-validation-for="GroupId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <b><label asp-for="MatchId">Match</label></b>
+                        <select id="available-matches" class="form-control" disabled
+                                asp-for="MatchId">
+                            <option>Please select a group, so the games could be loaded.</option>
+                        </select>
+                        <span asp-validation-for="MatchId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <b><label asp-for="Result">Score</label></b>
+                        <input asp-for="Result" type="text" class="form-control" />
+                        <span asp-validation-for="Result" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <b><label asp-for="WinnerSign">Result</label></b>
+                        <input asp-for="WinnerSign" type="text" class="form-control" />
+                        <span asp-validation-for="WinnerSign" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success float-md-right">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        let warningMsg = '@TempData["WarningMsg"]';
+        displayMsg(warningMsg, 'warning-msg-results');
+
+        $('#groups-select-results').change(function() {
+
+            let selectedValue = $(this).find('option:selected').val();
+
+            if (selectedValue.length === 1) {
+                $.ajax({
+                    url: '/Admin/Matches/GetAvailableMatchesByGroup',
+                    method: 'GET',
+                    data: { 'groupId': Number(selectedValue) }
+                }).then(function (matches) {
+
+                    $('#available-matches').empty();
+
+                    $('#available-matches').append($('<option>')
+                        .text('Please select match...')
+                        .prop('selected', 'selected'));
+
+                    for (let matchIndex in matches) {
+
+                        let currentMatch = matches[matchIndex];
+                        let matchTitle = currentMatch.homeTeam + ' - ' + currentMatch.awayTeam;
+                        let currentOption = $('<option>')
+                            .text(matchTitle)
+                            .val(currentMatch.id);
+
+                        $('#available-matches').append($(currentOption));
+                    }
+
+                    $('#available-matches').removeAttr('disabled');
+                });
+            } else {
+
+                $('#available-matches').empty();
+                $('#available-matches').append($('<option>').text('Please select a group, so the games could be loaded.'));
+                $('#available-matches').prop('disabled', 'disabled');
+            }
+        });
+    </script>
+}

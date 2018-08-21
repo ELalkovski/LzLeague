@@ -1,0 +1,142 @@
+﻿@model LzLeague.Common.AdminBindingModels.MatchBindingModel
+
+@{
+    ViewData["Title"] = "Add";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row" style="margin-top: 2em; margin-bottom: 20px">
+    <div class="col-md-6 offset-md-3">
+        <div class="card shadow-lg bg-white rounded">
+            <div class="card-header admin-header">
+                Add Match
+            </div>
+            <div class="card-body">
+                <form asp-area="Admin" asp-controller="Matches" asp-action="Add" method="post">
+                    <div class="form-group">
+                        <b><label asp-for="GroupId">Group</label></b>
+                        <select class="form-control" id="groups-select"
+                                asp-for="GroupId" asp-items="@(new SelectList(Model.AvailableGroups, "Id", "Name"))">
+                            <option>Please select a group...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <b><label asp-for="HomeTeam">Home Team</label></b>
+                        <select id="home-teams" class="form-control" disabled
+                                asp-for="HomeTeam">
+                            <option>Please select a group, so the teams could be loaded.</option>
+                        </select>
+                        <span asp-validation-for="HomeTeam" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <b><label asp-for="AwayTeam">Away Team</label></b>
+                        <select id="away-teams" class="form-control" disabled
+                                asp-for="AwayTeam">
+                            <option>Please select a group, so the teams could be loaded.</option>
+                        </select>
+                        <span asp-validation-for="AwayTeam" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <b><label asp-for="Date"></label></b>
+                        <input type="date" asp-for="Date" class="form-control"/>
+                        <span asp-validation-for="Date" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <b><label asp-for="BeginTime">Begin Time</label></b>
+                        <input type="time" asp-for="BeginTime" class="form-control"/>
+                        <span asp-validation-for="BeginTime" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success float-md-right">Add Match</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{ 
+    <script>
+        let availableTeams;
+
+        $('#groups-select').change(function() {
+            let selectedValue = $(this).find('option:selected').val();
+
+            if (selectedValue.length === 1) {
+                $.ajax({
+                    url: '/Admin/Matches/GetAvailableTeams',
+                    method: 'GET',
+                    data: { 'groupId': Number(selectedValue) }
+                }).then(function(teams) {
+                    availableTeams = teams;
+
+                    $('#home-teams').empty();
+                    $('#away-teams').empty();
+
+                    $('#home-teams').append($('<option>')
+                        .text('Please select a team...')
+                        .prop('selected', 'selected'));
+
+                    $('#away-teams').append($('<option>')
+                        .text('Please select a team...')
+                        .prop('selected', 'selected'));
+
+                    for (let teamIndex in teams) {
+
+                        let currentTeam = teams[teamIndex];
+                        let currentOption = $('<option>')
+                            .text(currentTeam.name)
+                            .val(currentTeam.name);
+
+                        $('#home-teams').append($(currentOption));
+                    }
+
+                    for (let teamIndex in teams) {
+
+                        let currentTeam = teams[teamIndex];
+                        let currentOption = $('<option>')
+                            .text(currentTeam.name)
+                            .val(currentTeam.name);
+
+                        $('#away-teams').append($(currentOption));
+                    }
+
+                    $('#home-teams').removeAttr('disabled');
+                    $('#away-teams').removeAttr('disabled');
+                });
+            } else {
+
+                $('#home-teams').empty();
+                $('#home-teams').append($('<option>').text('Please select a group, so the teams could be loaded.'));
+                $('#home-teams').prop('disabled', 'disabled');
+
+                $('#away-teams').empty();
+                $('#away-teams').append($('<option>').text('Please select a group, so the teams could be loaded.'));
+                $('#away-teams').prop('disabled', 'disabled');
+            }
+        });
+
+        $('#home-teams').change(function() {
+            let selectedOptionName = $(this).find('option:selected').val();
+
+            $('#away-teams').empty();
+            $('#away-teams').append($('<option>')
+                .text('Please select a team...')
+                .prop('selected', 'selected'));
+
+            for (let teamIndex in availableTeams) {
+
+                let currentTeam = availableTeams[teamIndex];
+
+                if (currentTeam.name !== selectedOptionName) {
+
+                    let currentOption = $('<option>')
+                        .text(currentTeam.name)
+                        .val(currentTeam.name);
+
+                    $('#away-teams').append($(currentOption));
+                }
+            }
+        });
+    </script>
+}

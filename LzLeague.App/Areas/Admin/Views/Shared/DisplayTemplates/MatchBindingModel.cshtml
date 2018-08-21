@@ -1,0 +1,9 @@
+﻿@model LzLeague.Common.AdminBindingModels.MatchBindingModel
+
+<tr>
+    <td>@Model.BeginTime.Value.Hours:@Model.BeginTime.Value.Minutes</td>
+    <td  class="d-flex justify-content-md-end">@Model.HomeTeam</td>
+    <td >@(Model.Result ?? "?-?")</td>
+    <td > @Model.AwayTeam</td>
+    <td style="color:red"> @Model.Group.Name</td>
+</tr>

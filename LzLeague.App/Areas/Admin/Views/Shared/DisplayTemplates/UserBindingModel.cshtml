@@ -1,0 +1,15 @@
+﻿@model LzLeague.Common.AdminBindingModels.UserBindingModel
+
+<tr>
+    <td name="index-col-users" style="font-weight: bold"></td>
+    <td style="color: green; font-weight: bold">@Model.FullName</td>
+    <td>@Model.Email</td>
+    <td>
+        <a asp-area="Admin" 
+           asp-controller="Users" 
+           asp-action="EditPrediction" 
+           asp-route-predictionId="@Model.PredictionId" class="btn btn-warning">
+            Prediction
+        </a>
+    </td>
+</tr>

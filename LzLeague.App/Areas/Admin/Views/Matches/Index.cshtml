@@ -1,0 +1,35 @@
+﻿@model IEnumerable<LzLeague.Common.AdminBindingModels.MatchGroupDisplayModel>
+@{
+    ViewData["Title"] = "Matches Program";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    bool isAdmin = User.IsInRole("Admin");
+}
+
+<div class="row" style="margin-top: 10px; margin-bottom: 20px">
+    <div class="col-md-8 col-xs-4 offset-md-1">
+        <h2>@ViewData["Title"]</h2>
+        <div id="success-msg-matches" class="alert alert-success" style="display: none">
+        </div>
+        <hr />
+        @if (isAdmin)
+        {
+            <a class="btn btn-success" asp-area="Admin" asp-controller="Matches" asp-action="Add">Add New Match</a>
+            <a class="btn btn-warning" asp-area="Admin" asp-controller="Matches" asp-action="AddResult">Add Result</a>
+        }
+        <br />
+    </div>
+</div>
+<div class="row" style="margin-bottom: 10px">
+    <div class="col-md-8 offset-md-1">
+        @Html.DisplayFor(m => m)
+    </div>
+</div>
+
+@section Scripts
+    {
+    <script>
+        let successMsg = '@TempData["SuccessMsg"]';
+        displayMsg(successMsg, 'success-msg-matches');
+    </script>
+}

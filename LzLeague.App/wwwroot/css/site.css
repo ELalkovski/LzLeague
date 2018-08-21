@@ -1,0 +1,87 @@
+﻿
+/* Wrapping element */
+/* Set some basic padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Carousel */
+.carousel-caption p {
+    font-size: 20px;
+    line-height: 1.4;
+}
+
+/* Make .svg files in the carousel display properly in older browsers */
+.carousel-inner .item img[src$=".svg"] {
+    width: 100%;
+}
+
+/* QR code generator */
+#qrCode {
+    margin: 15px;
+}
+
+/* Hide/rearrange for smaller screens */
+@media screen and (max-width: 767px) {
+    /* Hide captions */
+    .carousel-caption {
+        display: none;
+    }
+}
+
+.fa-user-circle, li.no-arrow > a > i.fa-cogs {
+    color: white;
+    font-size: 1.5em;
+}
+
+.fa-user-circle:hover, li.no-arrow > a > i.fa-cogs:hover {
+    color: #BCBCBC;
+}
+
+#bg-dark {
+    background-color: #6c757d;
+}
+
+#admin-layout {
+    background-color: #4682B4;
+}
+
+.admin-nav-colors {
+    background-color: #4C6990 !important;
+}
+
+.admin-sidebar-colors {
+    background-color: #244F87 !important;
+}
+
+.ml-auto > li.nav-link {
+    color: white !important;
+}
+
+.admin-header {
+    background-color: #4C6990;
+    color: white;
+    font-size: 1.5em;
+}
+
+#go-top-btn {
+    margin-bottom: 2em;
+    margin-top: -5em;
+    margin-left: -7em
+}
+
+.form-match-result {
+    color: #4C6990;
+    font-weight: bold;
+    font-size: 1.1em
+}
+
+.page-content {
+    margin-top: 2em;
+    margin-bottom: 2em
+}
+
+label {
+    font-weight: bold;
+}

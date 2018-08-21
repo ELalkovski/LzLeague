@@ -1,0 +1,130 @@
+﻿@model LzLeague.Common.PredictionsBindingModels.PredictionBindingModel
+@{
+    ViewData["Title"] = "My Prediction";
+}
+
+<form asp-controller="Predictions" asp-action="UserPrediction" method="post">
+    <div class="row" style="margin-top: 2em">
+        <div class="col-md-10 offset-md-1">
+            <h4>@ViewData["Title"]</h4>
+            <hr />
+            <div asp-validation-summary="All" class="text-danger">
+            </div>
+            <div class="alert alert-warning">
+                <strong>Warning!</strong> Once you've submitted the form, you will not be able to make corrections on it. If you made a mistake, please contact admin.
+            </div>
+            <div class="card shadow-lg">
+                <div class="card-header">
+                    <h5>Matches Results</h5>
+                </div>
+                <div class="card-body" id="match-results">
+                    @Html.DisplayFor(model => model.MatchesResults)
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row page-content">
+        <div class="col-md-10 offset-md-1">
+            <div class="card shadow-lg">
+                <div class="card-header">
+                    <h5>Groups Winners</h5>
+                </div>
+                <div class="card-body" id="groups-winners">
+                    @Html.DisplayFor(model => model.GroupWinners)
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row page-content">
+        <div class="col-md-10 offset-md-1">
+            <div class="form-group">
+                <button class="btn btn-success" type="submit" style="width: 100%">Submit</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts
+    {
+    <script>
+        let groupsBody = $('div.card-body').toArray()[1];
+        let formGroups = $(groupsBody).find('div.form-group');
+        let groupsIds = $(formGroups).find('input[name=GroupId]').toArray();
+        let previousSelectedOption;
+        let isPredictionExisting = '@TempData["ExistingPrediction"]';
+
+        $(document).ready(function () {
+
+            if (isPredictionExisting === 'true') {
+
+                $('button[type=submit]').remove();
+
+                $('#match-results')
+                    .find('input')
+                    .each(function(index, element) {
+                        $(element).prop('disabled', 'disabled');
+                    });
+
+                $('#groups-winners')
+                    .find('select')
+                    .each(function(index, element) {
+                        $(element).prop('disabled', 'disabled');
+                    });
+
+            } else {
+                let firstPlaceSelects = $(formGroups).find('select[custom-name=first-place-teams]');
+                let secondPlaceSelects = $(formGroups).find('select[custom-name=second-place-teams]');
+                let europaLeagueSelects = $(formGroups).find('select[custom-name=europa-league-teams]');
+
+                populateSelectListGroup(firstPlaceSelects, groupsIds);
+                populateSelectListGroup(secondPlaceSelects, groupsIds);
+                populateSelectListGroup(europaLeagueSelects, groupsIds);
+            }
+        });
+
+        $('select').on('focus', function () {
+
+            previousSelectedOption = $(this).find('option:selected');
+        }).change(function () {
+
+            let currentSelectedOption = $(this).find('option:selected').val();
+            let parent = $(this).parent().parent();
+            let selectElementsToChange = $(parent)
+                .find('select')
+                .toArray()
+                .filter(el => $(el).attr('name') !== $(this).attr('name'));
+
+            $(selectElementsToChange).each(function(index, element) {
+                
+                let currentSelect = $(element);
+                $(currentSelect).find('option[value="' + currentSelectedOption + '"]').hide();
+                $(currentSelect).find('option[value="' + $(previousSelectedOption).val() + '"]').show();
+            });
+        });
+
+        function populateSelectListGroup(selectListGroup, groupsIds) {
+            $(selectListGroup).each(function (index, element) {
+
+                let currentSelect = $(element);
+                let currentGroupId = Number($(groupsIds[index]).val());
+                populateSelectList(currentGroupId, currentSelect);
+            });
+        }
+
+        function populateSelectList(groupId, selectElement) {
+            $.ajax({
+                url: '/Admin/Matches/GetAvailableTeams',
+                method: 'GET',
+                data: { 'groupId': groupId }
+            }).then(function (teams) {
+                teams.forEach(function (element) {
+                    let currentOption = $('<option>')
+                        .text(element.name)
+                        .val(element.name);
+
+                    selectElement.append($(currentOption));
+                });
+            });
+        }
+    </script>
+}

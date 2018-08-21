@@ -1,0 +1,43 @@
+﻿@model LzLeague.Common.PredictionsBindingModels.GroupWinnerBindingModel
+
+<div class="form-group">
+    @Html.HiddenFor(x => x.Group.Name)
+    @Html.HiddenFor(x => x.GroupId)
+    <input asp-for="GroupId" name="GroupId" value="@Model.GroupId" hidden="hidden" />
+    <label class="col-md-1 form-check-inline">
+        <span>
+            <b>Group</b> <span class="form-match-result">@Model.Group.Name</span>
+        </span>
+    </label>
+    <div class="col-md-3 form-check-inline">
+        <select class="form-control form-control-sm" custom-name="first-place-teams"
+                asp-for="FirstPlace">
+            @if (Model.FirstPlace != null)
+            {
+                <option selected="selected">@Model.FirstPlace</option>
+            }
+            <option>Group Winner</option>
+        </select>
+    </div>
+    <div class="col-md-3 form-check-inline">
+        <select class="form-control form-control-sm" custom-name="second-place-teams"
+                asp-for="SecondPlace">
+            @if (Model.SecondPlace != null)
+            {
+                <option selected="selected">@Model.SecondPlace</option>
+            }
+            <option>Second Place</option>
+        </select>
+    </div>
+    <div class="col-md-3 form-check-inline">
+        <select class="form-control form-control-sm" custom-name="europa-league-teams"
+                asp-for="EuropaLeague">
+            @if (Model.EuropaLeague != null)
+            {
+                <option selected="selected">@Model.EuropaLeague</option>
+            }
+            <option>Europa League Qualifier</option>
+        </select>
+    </div>
+</div>
+<hr />

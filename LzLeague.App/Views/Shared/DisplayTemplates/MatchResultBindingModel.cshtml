@@ -1,0 +1,28 @@
+﻿@model LzLeague.Common.PredictionsBindingModels.MatchResultBindingModel
+
+<div class="form-group">
+    @Html.HiddenFor(x => x.MatchId)
+    @Html.HiddenFor(x => x.Match.Date)
+    @Html.HiddenFor(x => x.Match.HomeTeam)
+    @Html.HiddenFor(x => x.Match.AwayTeam)
+    @Html.HiddenFor(x => x.Match.BeginTime)
+    @Html.HiddenFor(x => x.Match.Group.Name)
+    @Html.HiddenFor(x => x.Match.GroupId)
+
+    <label class="form-check-inline">
+        @Model.Match.Date.Value.ToShortDateString() / @Model.Match.BeginTime.Value.Hours:@Model.Match.BeginTime.Value.Minutes
+    </label>
+    <label class="col-md-2 form-check-inline">
+        <span>
+            <b>Group</b> <span class="form-match-result">@Model.Match.Group.Name</span>
+        </span>
+    </label>
+    <label class="col-md-4 offset-md-1 form-check-inline">
+        <span style="font-size: 1.1em"><em>@Model.Match.HomeTeam </em> - <em>@Model.Match.AwayTeam</em></span>
+    </label>
+    <div class="form-check-inline float-md-right">
+        <input asp-for="Result" type="text" placeholder="Score" style="width: 5em" class="form-control" />
+        <input asp-for="Sign" type="text" placeholder="Result" class="form-control" style="width: 5em" />
+    </div>
+</div>
+<hr />
