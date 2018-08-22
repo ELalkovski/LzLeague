@@ -8,24 +8,20 @@
 
     public class EmailSender : IEmailSender
     {
-        public EmailSender(IOptions<AuthMessageSenderOptions> optionsAccessor)
+        public async Task SendEmailAsync(string email, string subject, string message)
         {
-            Options = optionsAccessor.Value;
-        }
+            var client = new SendGridClient("key");
+            //var from = new EmailAddress("emil27778@gmail.com", "Emil Lalkovski");
+            //var to = new EmailAddress(email, email);
+            //var msg = MailHelper.CreateSingleEmail(from, to, subject, message, message);
 
-        public AuthMessageSenderOptions Options { get; } //set only via Secret Manager
 
-        public Task SendEmailAsync(string email, string subject, string message)
-        {
-            return Execute(Options.SendGridKey, subject, message, email);
-        }
-
-        public Task Execute(string apiKey, string subject, string message, string email)
-        {
-            var client = new SendGridClient(apiKey);
+            //var response = await client.SendEmailAsync(msg);
+            //var body = await response.Body.ReadAsStringAsync();
+            //var status = response.StatusCode;
             var msg = new SendGridMessage()
             {
-                From = new EmailAddress("LzLeague.com", "Emil Lalkovski"),
+                From = new EmailAddress("emil27778@gmail.com", "Emil Lalkovski"),
                 Subject = subject,
                 PlainTextContent = message,
                 HtmlContent = message
@@ -39,7 +35,9 @@
                 ClickTracking = new ClickTracking { Enable = false }
             };
 
-            return client.SendEmailAsync(msg);
+            await client.SendEmailAsync(msg);
+            
         }
+
     }
 }

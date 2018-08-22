@@ -1,9 +1,10 @@
 ﻿@model LzLeague.Common.PredictionsBindingModels.GroupWinnerBindingModel
 
 <div class="form-group">
+    @Html.HiddenFor(x => x.PredictionId)
     @Html.HiddenFor(x => x.Group.Name)
     @Html.HiddenFor(x => x.GroupId)
-    <input asp-for="GroupId" name="GroupId" value="@Model.GroupId" hidden="hidden" />
+    <input asp-for="GroupId" name="GroupId" value="@Model.GroupId" hidden="hidden"/>
     <label class="col-md-1 form-check-inline">
         <span>
             <b>Group</b> <span class="form-match-result">@Model.Group.Name</span>

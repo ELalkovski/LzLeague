@@ -1,6 +1,7 @@
 ﻿@model LzLeague.Common.PredictionsBindingModels.MatchResultBindingModel
 
 <div class="form-group">
+    @Html.HiddenFor(x => x.PredictionId)
     @Html.HiddenFor(x => x.MatchId)
     @Html.HiddenFor(x => x.Match.Date)
     @Html.HiddenFor(x => x.Match.HomeTeam)
@@ -21,8 +22,8 @@
         <span style="font-size: 1.1em"><em>@Model.Match.HomeTeam </em> - <em>@Model.Match.AwayTeam</em></span>
     </label>
     <div class="form-check-inline float-md-right">
-        <input asp-for="Result" type="text" placeholder="Score" style="width: 5em" class="form-control" />
-        <input asp-for="Sign" type="text" placeholder="Result" class="form-control" style="width: 5em" />
+        <input asp-for="Result" type="text" placeholder="Score" style="width: 5em" class="form-control"/>
+        <input asp-for="Sign" type="text" placeholder="Result" class="form-control" style="width: 5em"/>
     </div>
 </div>
 <hr />

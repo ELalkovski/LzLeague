@@ -22,7 +22,8 @@
             this.mapper = mapper;
         }
 
-        [Authorize(Roles = "Admin")]
+        [HttpGet("/Teams")]
+        [AllowAnonymous]
         public IActionResult Index()
         {
             var groups = this.ts.GetAllGroups();

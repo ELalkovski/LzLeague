@@ -26,6 +26,10 @@
 
         public int Draws { get; set; }
 
+        public int GoalsReceived { get; set; }
+
+        public int GoalsScored { get; set; }
+
         public int? GroupId { get; set; }
         public GroupBindingModel Group { get; set; }
 

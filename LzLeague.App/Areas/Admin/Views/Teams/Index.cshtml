@@ -14,22 +14,25 @@
         <br />
         @Html.DisplayFor(model => model)
     </div>
-    <div class="col-md-2 offset-md-1">
-        <div class="card">
-            <div class="card-header admin-header d-flex justify-content-center">
-                <h5><b>Actions</b></h5>
-            </div>
-            <div class="card-body">
-                <div class="row d-flex justify-content-center">
-                    <a class="btn btn-success" asp-area="Admin" asp-controller="Teams" asp-action="Add">Add New Team</a>
+    @if (User.IsInRole("Admin"))
+    {
+        <div class="col-md-2 offset-md-1">
+            <div class="card">
+                <div class="card-header admin-header d-flex justify-content-center">
+                    <h5><b>Actions</b></h5>
                 </div>
-                <br />
-                <div class="row d-flex justify-content-center" >
-                    <a style="width: 8.2em" class="btn btn-danger" asp-area="Admin" asp-controller="Teams" asp-action="Delete">Delete Team</a>
+                <div class="card-body">
+                    <div class="row d-flex justify-content-center">
+                        <a class="btn btn-success" asp-area="Admin" asp-controller="Teams" asp-action="Add">Add New Team</a>
+                    </div>
+                    <br />
+                    <div class="row d-flex justify-content-center" >
+                        <a style="width: 8.2em" class="btn btn-danger" asp-area="Admin" asp-controller="Teams" asp-action="Delete">Delete Team</a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    }
 </div>
 
 <div class="row">

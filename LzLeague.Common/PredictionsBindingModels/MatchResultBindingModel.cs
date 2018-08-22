@@ -6,6 +6,9 @@
 
     public class MatchResultBindingModel
     {
+        public int PredictionId { get; set; }
+        public Prediction Prediction { get; set; }
+
         public int MatchId { get; set; }
         public MatchBindingModel Match { get; set; }
 

@@ -84,6 +84,19 @@
             }
         }
 
+        public async Task<Prediction> GetPrediction(int predictionId)
+        {
+            var prediction = await this.db
+                .Predictions
+                .Include(p => p.MatchResultsPredictions)
+                .ThenInclude(mrp => mrp.Match)
+                .Include(p => p.GroupsWinners)
+                .ThenInclude(gwp => gwp.Group)
+                .FirstOrDefaultAsync(p => p.Id == predictionId);
+
+            return prediction;
+        }
+
         private async Task UpdateRankingResults(Group group)
         {
             var winner = group.Teams.FirstOrDefault(t => t.Position == 1);
