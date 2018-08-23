@@ -1,0 +1,51 @@
+﻿@model LzLeague.Common.PredictionsBindingModels.PredictionBindingModel
+@{
+    ViewData["Title"] = "View Prediction";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row" style="margin-top: 2em">
+    <div class="col-md-10 offset-md-1">
+        <h4 style="color: #6c757d; font-weight: bold;"><em>@TempData["FullName"]'s Prediction</em></h4>
+        <a class="btn btn-info" asp-area="" asp-controller="Predictions" asp-action="UsersStandings">Standings</a>
+        <hr />
+        <div class="card shadow-lg">
+            <div class="card-header">
+                <h5>Matches Results</h5>
+            </div>
+            <div class="card-body" id="match-results">
+                @Html.DisplayFor(model => model.MatchesResults)
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row page-content">
+    <div class="col-md-10 offset-md-1">
+        <div class="card shadow-lg">
+            <div class="card-header">
+                <h5>Groups Winners</h5>
+            </div>
+            <div class="card-body" id="groups-winners">
+                @Html.DisplayFor(model => model.GroupWinners)
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#match-results')
+                .find('input')
+                .each(function(index, element) {
+                    $(element).prop('disabled', 'disabled');
+                });
+
+            $('#groups-winners')
+                .find('select')
+                .each(function(index, element) {
+                    $(element).prop('disabled', 'disabled');
+                });
+        });
+    </script>
+}

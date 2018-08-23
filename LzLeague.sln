@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LzLeague.Models", "LzLeague
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LzLeague.Services", "LzLeague.Services\LzLeague.Services.csproj", "{24960062-A4A9-4197-8D06-9FCB934DBDF4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LzLeague.Common", "LzLeague.Common\LzLeague.Common.csproj", "{100DFC68-AAAA-4DA0-AD63-B9127604956D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LzLeague.Common", "LzLeague.Common\LzLeague.Common.csproj", "{100DFC68-AAAA-4DA0-AD63-B9127604956D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LzLeague.Tests", "LzLeague.Tests\LzLeague.Tests.csproj", "{2E29FE61-4BB9-4135-B626-34F14EBD2B47}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{100DFC68-AAAA-4DA0-AD63-B9127604956D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{100DFC68-AAAA-4DA0-AD63-B9127604956D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{100DFC68-AAAA-4DA0-AD63-B9127604956D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E29FE61-4BB9-4135-B626-34F14EBD2B47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E29FE61-4BB9-4135-B626-34F14EBD2B47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E29FE61-4BB9-4135-B626-34F14EBD2B47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E29FE61-4BB9-4135-B626-34F14EBD2B47}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,15 @@
+﻿@model LzLeague.Common.AdminBindingModels.ArticleBindingModel
+
+<div class="row" style="margin-bottom: 3em">
+    <div class="col-md-12">
+        <a asp-area="" asp-controller="Articles" asp-action="Read" asp-route-articleId="@Model.Id" style="text-decoration: none">
+            <img src="@(Model.CoverUrl ?? "https://img.uefa.com/imgml/uefacom/ucl/social/og-default.jpg")" style="width: 8em; height: 6em" />
+        </a>
+        <h5 style="display: inline">
+            <a asp-area="" asp-controller="Articles" asp-action="Read" asp-route-articleId="@Model.Id">
+                @Model.Title
+            </a>
+        </h5>
+    </div>
+</div>
+

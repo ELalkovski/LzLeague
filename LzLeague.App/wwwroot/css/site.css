@@ -89,3 +89,13 @@ label {
 #table-standings > tbody > tr{
     cursor: default
 }
+
+#home-article > div.card.shadow-lg > div.card-header {
+    height: 12em;
+    background-color: #6c757d
+}
+
+#home-article > div.card.shadow-lg > div.card-body {
+    height: 8em;
+    background-color: #212529
+} 

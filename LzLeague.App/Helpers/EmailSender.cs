@@ -10,7 +10,7 @@
     {
         public async Task SendEmailAsync(string email, string subject, string message)
         {
-            var client = new SendGridClient("key");
+            var client = new SendGridClient("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");
             //var from = new EmailAddress("emil27778@gmail.com", "Emil Lalkovski");
             //var to = new EmailAddress(email, email);
             //var msg = MailHelper.CreateSingleEmail(from, to, subject, message, message);

@@ -1,0 +1,36 @@
+﻿@model LzLeague.Common.AdminBindingModels.ArticleBindingModel
+@{
+    ViewData["Title"] = "Add Article";
+}
+
+<div class="row" style="margin-top: 2em">
+    <div class="col-md-6 offset-md-3">
+        <div class="card shadow-lg bg-white rounded">
+            <div class="card-header admin-header">
+                @ViewData["Title"]
+            </div>
+            <div class="card-body">
+                <form asp-area="" asp-controller="Articles" asp-action="Add" method="post">
+                    <div class="form-group">
+                        <b><label asp-for="Title"></label></b>
+                        <input asp-for="Title" class="form-control" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <b><label asp-for="Content"></label></b>
+                        <textarea asp-for="Content" class="form-control"></textarea>
+                        <span asp-validation-for="Content" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <b><label asp-for="CoverUrl"></label></b>
+                        <input asp-for="CoverUrl" class="form-control" />
+                        <span asp-validation-for="CoverUrl" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success float-md-right">Add Article</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

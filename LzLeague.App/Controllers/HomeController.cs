@@ -19,6 +19,7 @@
             this.mapper = mapper;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             var articles = this._as.GetAll();
@@ -30,10 +31,10 @@
             return this.View(articlesVm);
         }
 
-        //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        //public IActionResult Error()
-        //{
-        //    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        //}
+        [HttpGet]
+        public IActionResult Rules()
+        {
+            return this.View();
+        }
     }
 }
