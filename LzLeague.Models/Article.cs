@@ -18,6 +18,8 @@
         [Required]
         public string Content { get; set; }
 
+        public string CoverUrl { get; set; }
+
         public ICollection<Comment> Comments { get; set; }
     }
 }

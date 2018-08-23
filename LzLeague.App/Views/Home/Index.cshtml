@@ -1,14 +1,40 @@
-﻿@{
+﻿@model ICollection<LzLeague.Common.AdminBindingModels.ArticleBindingModel>
+@{
     ViewData["Title"] = "Home Page";
+    int index = 1;
 }
 
-<div class="card shadow-lg">
-    <div class="card-header">
-        Index
-    </div>
-    <div class="card-body">
-        <h5 class="card-title">Special title treatment</h5>
-        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
+<div class="row" style="margin-top: 2em">
+    <div class="col-md-10 offset-md-1">
+        @foreach (var article in Model)
+        {
+            if (index == 1)
+            {
+                @:<div class="row">
+                }
+                <div class="col-md-3">
+                    <div class="card shadow-lg">
+                        <div class="card-header">
+                            Index
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Special title treatment</h5>
+                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                        </div>
+                    </div>
+                </div>
+                    if (index % 3 == 0)
+                    {
+                    @:</div><div class="row">
+                        index = 1;
+                    }
+                    @(index++)
+                
+            }
+        @if (index < 3)
+        {
+            @:</div>
+        }
     </div>
 </div>

@@ -58,11 +58,12 @@
                             <i class="fas fa-fw fa-cogs"></i>
                         </a>
                     }
-                    <div class="dropdown-menu" aria-labelledby="adminManage">
-                        <a class="dropdown-item" asp-area="Admin" asp-controller="Users" asp-action="Index">Users</a>
-                        <a class="dropdown-item" asp-area="Admin" asp-controller="Teams" asp-action="Index">Teams</a>
-                        <a class="dropdown-item" asp-area="Admin" asp-controller="Matches" asp-action="Index">Matches</a>
-                    </div>
+                        <div class="dropdown-menu" aria-labelledby="adminManage">
+                            <a class="dropdown-item" asp-area="Admin" asp-controller="Users" asp-action="Index">Users</a>
+                            <a class="dropdown-item" asp-area="Admin" asp-controller="Teams" asp-action="Index">Teams</a>
+                            <a class="dropdown-item" asp-area="Admin" asp-controller="Matches" asp-action="Index">Matches</a>
+                            <a class="dropdown-item" asp-area="" asp-controller="Articles" asp-action="Index">Articles</a>
+                        </div>
                 </li>
             }
             <li class="nav-item dropdown no-arrow">
@@ -88,7 +89,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a asp-area="" asp-controller="Articles" asp-action="Index" class="nav-link">
                     <i class="fas fa-fw fa-newspaper"></i>
                     <span>News</span>
                 </a>
@@ -134,6 +135,7 @@
                         <a class="dropdown-item" asp-area="Admin" asp-controller="Users" asp-action="Index">Users</a>
                         <a class="dropdown-item" asp-area="Admin" asp-controller="Teams" asp-action="Index">Teams</a>
                         <a class="dropdown-item" asp-area="Admin" asp-controller="Matches" asp-action="Index">Matches</a>
+                        <a class="dropdown-item" asp-area="" asp-controller="Articles" asp-action="Index">Articles</a>
                     </div>
                 </li>
             }

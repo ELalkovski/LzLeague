@@ -6,19 +6,26 @@
 <div class="row" style="margin-top: 2em">
     <div class="col-md-10 offset-md-1">
         <h2>@ViewData["Title"]</h2>
+        <div id="standings-msg-warning" class="alert alert-danger" style="display: none">
+        </div>
         <div class="table-responsive">
             <table id="table-standings" class="table table-hover">
-                <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Results</th>
-                    <th>Scores</th>
-                    <th>Gr. Winners</th>
-                    <th>Gr. Sp</th>
-                    <th>Gr. Elq</th>
-                    <th>Total</th>
-                </tr>
-                @Html.DisplayFor(model => model)
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Results</th>
+                        <th>Scores</th>
+                        <th>Gr. Winners</th>
+                        <th>Gr. Sp</th>
+                        <th>Gr. Elq</th>
+                        <th>Total</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @Html.DisplayFor(model => model)
+                </tbody>
             </table>
         </div>
     </div>
@@ -26,9 +33,16 @@
 
 @section Scripts {
     <script>
+        let failMsg = '@TempData["SuccessMsg"]';
+        displayMsg(failMsg, 'standings-msg-warning');
+
         $(document).ready(function() {
             $('table').find('td[name="index-col"]').each(function(index, element) {
                 $(element).text(++index);
+            });
+
+            $('table > tbody > tr').click(function() {
+                console.log('hi');
             });
         });
     </script>

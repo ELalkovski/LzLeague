@@ -74,6 +74,33 @@
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin, User")]
+        public async Task<IActionResult> ViewPrediction(string userId)
+        {
+            var prediction = await this.ps.GetUserPrediction(userId);
+            var user = await this.userManager.FindByIdAsync(userId);
+
+            if (prediction == null)
+            {
+                this.TempData["WarningMsg"] = "Prediction you are trying to reach doesn't exist.";
+                return this.RedirectToAction("UsersStandings");
+            }
+
+            var predictionVm = this.mapper.Map<PredictionBindingModel>(prediction);
+
+            predictionVm.MatchesResults = this.mapper
+                .Map<ICollection<MatchResultPrediction>, ICollection<MatchResultBindingModel>>(prediction
+                    .MatchResultsPredictions);
+            predictionVm.GroupWinners = this.mapper
+                .Map<ICollection<GroupWinnerPrediction>, ICollection<GroupWinnerBindingModel>>(prediction
+                    .GroupsWinners);
+
+            this.TempData["FullName"] = user.FullName;
+
+            return this.View(predictionVm);
+        }
+
+        [HttpGet]
         [AllowAnonymous]
         public IActionResult UsersStandings()
         {

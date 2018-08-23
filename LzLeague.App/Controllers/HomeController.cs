@@ -1,43 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using LzLeague.App.Models;
-
-namespace LzLeague.App.Controllers
+﻿namespace LzLeague.App.Controllers
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using AutoMapper;
+    using LzLeague.Common.AdminBindingModels;
+    using LzLeague.Models;
+    using LzLeague.Services.Admin.Contracts;
+    using Microsoft.AspNetCore.Mvc;
+
     public class HomeController : Controller
     {
+        private readonly IArticlesService _as;
+        private readonly IMapper mapper;
+
+        public HomeController(IArticlesService _as, IMapper mapper)
+        {
+            this._as = _as;
+            this.mapper = mapper;
+        }
+
         public IActionResult Index()
         {
-            return View();
+            var articles = this._as.GetAll();
+            var articlesVm = this.mapper
+                .Map<ICollection<Article>, ICollection<ArticleBindingModel>>(articles)
+                .OrderByDescending(a => a.Id)
+                .ToList();
+
+            return this.View(articlesVm);
         }
 
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        //public IActionResult Error()
+        //{
+        //    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        //}
     }
 }

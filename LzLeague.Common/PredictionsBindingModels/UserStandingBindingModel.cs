@@ -2,6 +2,8 @@
 {
     public class UserStandingBindingModel
     {
+        public string Id { get; set; }
+
         public string FullName { get; set; }
 
         public int GuessedScores { get; set; }

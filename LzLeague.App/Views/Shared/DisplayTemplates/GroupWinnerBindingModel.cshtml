@@ -17,7 +17,10 @@
             {
                 <option selected="selected">@Model.FirstPlace</option>
             }
-            <option>Group Winner</option>
+            else
+            {
+                <option>Group Winner</option>
+            }
         </select>
     </div>
     <div class="col-md-3 form-check-inline">
@@ -27,7 +30,10 @@
             {
                 <option selected="selected">@Model.SecondPlace</option>
             }
-            <option>Second Place</option>
+            else
+            {
+                <option>Second Place</option>
+            }
         </select>
     </div>
     <div class="col-md-3 form-check-inline">
@@ -37,7 +43,10 @@
             {
                 <option selected="selected">@Model.EuropaLeague</option>
             }
-            <option>Europa League Qualifier</option>
+            else
+            {
+                <option>Europa League Qualifier</option>
+            }
         </select>
     </div>
 </div>

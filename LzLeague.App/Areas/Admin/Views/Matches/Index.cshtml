@@ -1,24 +1,39 @@
 ﻿@model IEnumerable<LzLeague.Common.AdminBindingModels.MatchGroupDisplayModel>
 @{
-    ViewData["Title"] = "Matches Program";
+    ViewData["Title"] = "Program";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     bool isAdmin = User.IsInRole("Admin");
 }
 
-<div class="row" style="margin-top: 10px; margin-bottom: 20px">
+<div class="row" style="margin-top: 10px">
     <div class="col-md-8 col-xs-4 offset-md-1">
         <h2>@ViewData["Title"]</h2>
         <div id="success-msg-matches" class="alert alert-success" style="display: none">
         </div>
         <hr />
-        @if (isAdmin)
-        {
-            <a class="btn btn-success" asp-area="Admin" asp-controller="Matches" asp-action="Add">Add New Match</a>
-            <a class="btn btn-warning" asp-area="Admin" asp-controller="Matches" asp-action="AddResult">Add Result</a>
-        }
-        <br />
     </div>
+    @if (isAdmin)
+    {
+        <div class="col-md-2">
+            <div class="card">
+                <div class="card-header admin-header d-flex justify-content-center">
+                    <h5><b>Actions</b></h5>
+                </div>
+                <div class="card-body">
+                    <div class="row d-flex justify-content-center">
+                        <a class="btn btn-success" asp-area="Admin" asp-controller="Matches" asp-action="Add">Add New Match</a>
+                    </div>
+                    <br />
+                    <div class="row d-flex justify-content-center">
+                        <a class="btn btn-warning" asp-area="Admin" asp-controller="Matches" asp-action="AddResult" style="width: 9em">
+                            Add Result
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 </div>
 <div class="row" style="margin-bottom: 10px">
     <div class="col-md-8 offset-md-1">

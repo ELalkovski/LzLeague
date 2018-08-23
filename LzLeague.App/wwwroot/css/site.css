@@ -85,3 +85,7 @@
 label {
     font-weight: bold;
 }
+
+#table-standings > tbody > tr{
+    cursor: default
+}

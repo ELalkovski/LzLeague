@@ -82,6 +82,7 @@
             services.AddScoped<IMatchService, MatchService>();
             services.AddScoped<IPredictionsService, PredictionsService>();
             services.AddScoped<IUsersService, UsersService>();
+            services.AddScoped<IArticlesService, ArticlesService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

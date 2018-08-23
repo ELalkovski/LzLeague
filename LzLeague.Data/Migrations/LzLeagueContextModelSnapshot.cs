@@ -85,6 +85,8 @@ namespace LzLeague.Data.Migrations
                     b.Property<string>("Content")
                         .IsRequired();
 
+                    b.Property<string>("CoverUrl");
+
                     b.Property<string>("Title")
                         .IsRequired();
 

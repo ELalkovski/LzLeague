@@ -14,6 +14,7 @@
             // WARNING: Possible bugs because of the ReverseMap()
 
             this.CreateMap<Prediction, UserStandingBindingModel>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(x => x.Owner.Id))
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(x => x.Owner.FullName))
                 .ForMember(dest => dest.TotalScore, opt => opt.MapFrom(x => x.Owner.TotalScore))
                 .ReverseMap();

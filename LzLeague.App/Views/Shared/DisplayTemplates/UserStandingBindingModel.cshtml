@@ -1,6 +1,6 @@
 ﻿@model LzLeague.Common.PredictionsBindingModels.UserStandingBindingModel
 
-<tr>
+<tr name="user-row">
     <td name="index-col" style="font-weight: bold"></td>
     <td style="color: green; font-weight: bold">@Model.FullName</td>
     <td>@Model.GuessedResults</td>
@@ -9,4 +9,13 @@
     <td>@Model.GuessedSecondPlaces</td>
     <td>@Model.GuessedElTeams</td>
     <td style="color: blue; font-weight: bold">@Model.TotalScore</td>
+    <td>
+        <a 
+            asp-area="" 
+            asp-controller="Predictions" 
+            asp-action="ViewPrediction" 
+           asp-route-userId="@Model.Id" class="btn btn-info">
+            Prediction
+        </a>
+    </td>
 </tr>
