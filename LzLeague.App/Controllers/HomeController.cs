@@ -2,21 +2,25 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using AutoMapper;
     using LzLeague.Common.AdminBindingModels;
     using LzLeague.Models;
     using LzLeague.Services.Admin.Contracts;
+    using Microsoft.AspNetCore.Identity.UI.Services;
     using Microsoft.AspNetCore.Mvc;
 
     public class HomeController : Controller
     {
         private readonly IArticlesService _as;
         private readonly IMapper mapper;
+        private readonly IEmailSender _emailSender;
 
-        public HomeController(IArticlesService _as, IMapper mapper)
+        public HomeController(IArticlesService _as, IMapper mapper, IEmailSender emailSender)
         {
             this._as = _as;
             this.mapper = mapper;
+            this._emailSender = emailSender;
         }
 
         [HttpGet]

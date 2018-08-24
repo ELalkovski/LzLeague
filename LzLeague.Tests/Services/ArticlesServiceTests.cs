@@ -64,7 +64,7 @@ namespace LzLeague.Tests.Services
             await articlesService.Delete(articleToDelete);
 
             // Assert
-            //Assert.
+            Assert.AreEqual(false, articles.Any(a => a.Title == "ArticleToDelete"));
         }
 
         [TestInitialize]

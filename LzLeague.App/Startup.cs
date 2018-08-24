@@ -10,6 +10,7 @@
     using Microsoft.Extensions.DependencyInjection;
     using Data;
     using Helpers;
+    using LzLeague.App.Areas.Identity.Services;
     using LzLeague.Models;
     using LzLeague.Services.Base;
     using LzLeague.Services.Base.Contracts;
@@ -74,8 +75,9 @@
             //Custom Services
             services.AddAutoMapper();
 
-            services.AddSingleton<IEmailSender, EmailSender>();
-            services.Configure<AuthMessageSenderOptions>(this.Configuration);
+            //services.Configure<AuthMessageSenderOptions>(this.Configuration);
+            
+            
 
             services.AddScoped<IAdminAccountService, AdminAccountService>();
             services.AddScoped<ITeamsService, TeamsService>();
@@ -84,7 +86,17 @@
             services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<IArticlesService, ArticlesService>();
 
+
+            services.AddSingleton<IEmailSender, SendGridEmailSender>();
+            services.Configure<SendGridOptions>(this.Configuration.GetSection("EmailSettings"));
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddHttpsRedirection(options =>
+            {
+                options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
+                options.HttpsPort = 5001;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

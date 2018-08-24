@@ -9,6 +9,8 @@
 
         public string Name { get; set; }
 
+        public int MatchesPlayed { get; set; }
+
         public ICollection<TeamBindingModel> Teams { get; set; }
 
         public ICollection<GroupWinnerPrediction> GroupWinnerPredictions { get; set; }

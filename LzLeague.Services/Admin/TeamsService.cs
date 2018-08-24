@@ -126,9 +126,23 @@
                 .FirstOrDefaultAsync(t => t.Name == name.Trim());
         }
 
+        public async Task<Team> GetTeamById(int teamId)
+        {
+            return await this.db
+                .Teams
+                .Include(t => t.Group)
+                .FirstOrDefaultAsync(t => t.Id == teamId);
+        }
+
         public async Task<ICollection<Team>> GetAllTeams()
         {
             return this.db.Teams.ToList();
+        }
+
+        public async Task Delete(Team team)
+        {
+            this.db.Teams.Remove(team);
+            await this.db.SaveChangesAsync();
         }
 
         private async Task UpdateTeamsPositions(Group group)

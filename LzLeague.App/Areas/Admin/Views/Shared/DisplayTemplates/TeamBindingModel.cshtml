@@ -1,7 +1,12 @@
 ﻿@model LzLeague.Common.AdminBindingModels.TeamBindingModel
 
 <tr>
-    <td><img src="@Model.ImageUrl" class="img-circle" style="width: 40px" /> <b>@Model.Name</b></td>
+    <td>
+        <a asp-area="Admin" asp-controller="Teams" asp-action="Details" asp-route-teamId="@Model.Id" style="text-decoration: none">
+            <img src="@Model.ImageUrl" class="img-circle" style="width: 40px" />
+            <b>@Model.Name</b>
+        </a>
+    </td>
     <td>@Model.Wins</td>
     <td>@Model.Loses</td>
     <td>@Model.Draws</td>

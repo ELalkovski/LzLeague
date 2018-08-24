@@ -1,0 +1,73 @@
+﻿@model LzLeague.Common.AdminBindingModels.TeamBindingModel
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row" style="margin-top: 20px; margin-bottom: 20px">
+    <div class="col-md-6 col-xs-2 offset-md-1">
+        @if (User.IsInRole("Admin"))
+        {
+  
+        }
+        <div class="card shadow-lg">
+            <div class="card-header text-center">
+                <img src="@Model.ImageUrl" class="card-img" style="width: 13em"/>
+            </div>
+            <div class="card-header">
+                <h3 class="text-center" style="color: #4C6990">Group @Model.Group.Name</h3>
+                <hr/>
+                <h2 class="text-center">@Model.Name</h2>
+            </div>
+            <div id="team-details" class="card-body">
+                <span><b>Position </b></span> <span class="float-md-right">@Model.Position</span>
+                <hr/>
+                <span><b>Wins </b></span> <span class="float-md-right">@Model.Wins</span>
+                <hr/>
+                <span><b>Draws </b></span> <span class="float-md-right">@Model.Draws</span>
+                <hr/>
+                <span><b>Loses </b></span> <span class="float-md-right">@Model.Loses</span>
+                <hr/>
+                <span><b>Goals Scored </b></span> <span class="float-md-right">@Model.GoalsScored</span>
+                <hr/>
+                <span><b>Goals Received </b></span> <span class="float-md-right">@Model.GoalsReceived</span>
+                <hr/>
+                <span><b>Goals Difference </b></span> <span class="float-md-right">@(Model.GoalsScored - Model.GoalsReceived)</span>
+                <hr/>
+                <span><b>Points </b></span> <span class="float-md-right">@(Model.GoalsScored - Model.GoalsReceived)</span>
+            </div>
+            <div class="card-footer">
+                @if (User.IsInRole("Admin") && Model.Group.MatchesPlayed == 0)
+                {
+                    <a class="btn btn-danger float-md-right" style="color:white" data-toggle="modal" data-target="#modal-delete-team">
+                        Delete Team
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-delete-team" tabindex="-1" role="dialog" aria-labelledby="confirmation-modal-article-label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete Article</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this article?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a asp-area="Admin" asp-controller="Teams" asp-action="Delete" asp-route-teamId="@Model.Id"
+                   class="btn btn-danger float-md-right">
+                    Delete Team
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+

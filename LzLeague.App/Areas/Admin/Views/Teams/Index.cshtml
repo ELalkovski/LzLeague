@@ -10,8 +10,9 @@
         <h2>@ViewData["Title"]</h2>
         <div id="success-msg-teams" class="alert alert-success" style="display: none">
         </div>
+        <div id="warning-msg-teams" class="alert alert-danger" style="display: none">
+        </div>
         <hr />
-        <br />
         @Html.DisplayFor(model => model)
     </div>
     @if (User.IsInRole("Admin"))
@@ -24,10 +25,6 @@
                 <div class="card-body">
                     <div class="row d-flex justify-content-center">
                         <a class="btn btn-success" asp-area="Admin" asp-controller="Teams" asp-action="Add">Add New Team</a>
-                    </div>
-                    <br />
-                    <div class="row d-flex justify-content-center" >
-                        <a style="width: 8.2em" class="btn btn-danger" asp-area="Admin" asp-controller="Teams" asp-action="Delete">Delete Team</a>
                     </div>
                 </div>
             </div>
@@ -47,7 +44,10 @@
 {
     <script>
         let successMsg = '@TempData["SuccessMsg"]';
+        let warningMsg = '@TempData["WarningMsg"]';
+
         displayMsg(successMsg, 'success-msg-teams');
+        displayMsg(warningMsg, 'warning-msg-teams');
 
         $('#go-top-btn').click(function() {
             $(document).scrollTop(0);

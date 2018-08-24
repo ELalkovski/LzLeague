@@ -70,5 +70,40 @@
 
             return this.RedirectToAction("Index");
         }
+
+        [HttpGet("/Details/{teamId}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Details(int teamId)
+        {
+            var team = await this.ts.GetTeamById(teamId);
+            var teamVm = this.mapper.Map<Team, TeamBindingModel>(team);
+
+            return this.View(teamVm);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Delete(int teamId)
+        {
+            var team = await this.ts.GetTeamById(teamId);
+
+            if (team == null)
+            {
+                this.TempData["WarningMsg"] = "Sorry, team you are trying to reach doesn't exist.";
+                return this.RedirectToAction("Index");
+            }
+            if (team.Group.MatchesPlayed > 0)
+            {
+                this.TempData["WarningMsg"] = 
+                    $"Matches from Group {team.Group.Name} have already being played. You cannot delete team that started playing.";
+                return this.RedirectToAction("Index");
+            }
+
+            await this.ts.Delete(team);
+
+            this.TempData["SuccessMsg"] = "Team was deleted successfully.";
+            
+            return this.RedirectToAction("Index");
+        }
     }
 }

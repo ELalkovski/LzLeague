@@ -24,5 +24,9 @@
         Task UpdateTeamsStatistics(string homeTeamName, string awayTeamName, string score, string result, Group group);
 
         Task<Team> GetTeamByName(string name);
+
+        Task<Team> GetTeamById(int teamId);
+
+        Task Delete(Team team);
     }
 }

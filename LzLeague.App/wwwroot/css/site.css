@@ -98,4 +98,21 @@ label {
 #home-article > div.card.shadow-lg > div.card-body {
     height: 8em;
     background-color: #212529
-} 
+}
+
+#rules-link {
+    color: white;
+    font-weight: bold;
+}
+
+#rules-link:hover {
+    color: #6c757d;
+}
+
+#team-details {
+    font-size: 1.5em
+}
+
+#team-details > span.float-md-right {
+    color: grey
+}
