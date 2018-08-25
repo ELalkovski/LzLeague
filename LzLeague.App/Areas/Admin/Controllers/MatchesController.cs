@@ -78,6 +78,30 @@
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Delete(int matchId)
+        {
+            var match = await this.ms.GetMatch(matchId);
+
+            if (match == null)
+            {
+                this.TempData["WarningMsg"] = "Match you are trying to reach doesn't exist.";
+                return this.RedirectToAction("Index");
+            }
+            if (!string.IsNullOrEmpty(match.Result) ||
+                !string.IsNullOrEmpty(match.WinnerSign))
+            {
+                this.TempData["WarningMsg"] = "You cannot delete match that is already being played.";
+                return this.RedirectToAction("Index");
+            }
+
+            await this.ms.Delete(match);
+
+            this.TempData["SuccessMsg"] = "Match has been deleted successfully.";
+            return this.RedirectToAction("Index");
+        }
+             
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddResult()
         {
             var model = new AddResultBindingModel()

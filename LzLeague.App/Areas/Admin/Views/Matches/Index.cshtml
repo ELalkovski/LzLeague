@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<LzLeague.Common.AdminBindingModels.MatchGroupDisplayModel>
 @{
-    ViewData["Title"] = "Program";
+    ViewData["Title"] = "Schedule";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     bool isAdmin = User.IsInRole("Admin");
@@ -10,6 +10,8 @@
     <div class="col-md-8 col-xs-4 offset-md-1">
         <h2>@ViewData["Title"]</h2>
         <div id="success-msg-matches" class="alert alert-success" style="display: none">
+        </div>
+        <div id="warning-msg-matches" class="alert alert-danger" style="display: none">
         </div>
         <hr />
     </div>
@@ -45,6 +47,8 @@
     {
     <script>
         let successMsg = '@TempData["SuccessMsg"]';
+        let warningMsg = '@TempData["WarningMsg"]';
         displayMsg(successMsg, 'success-msg-matches');
+        displayMsg(warningMsg, 'warning-msg-matches');
     </script>
 }

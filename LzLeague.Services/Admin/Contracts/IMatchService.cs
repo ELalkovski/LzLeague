@@ -9,6 +9,8 @@
     {
         Task CreateMatch(Match match);
 
+        Task Delete(Match match);
+
         ICollection<Match> GetAllMatches();
 
         ICollection<Match> GetMatchesByGroup(int groupId);

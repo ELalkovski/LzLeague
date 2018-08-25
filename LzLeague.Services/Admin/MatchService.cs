@@ -24,6 +24,12 @@
             await this.db.SaveChangesAsync();
         }
 
+        public async Task Delete(Match match)
+        {
+            this.db.Matches.Remove(match);
+            await this.db.SaveChangesAsync();
+        }
+
         public async Task<Match> GetMatch(int matchId)
         {
             return await this.db

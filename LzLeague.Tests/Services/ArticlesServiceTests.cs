@@ -22,7 +22,7 @@ namespace LzLeague.Tests.Services
             var articlesService = new ArticlesService(this.dbContext);
 
             // Act 
-            await articlesService.Create(new Article { Title = "TestTile", Content = "TestContent" });
+            await articlesService.Create(new Article { Title = "TestTitle", Content = "TestContent" });
             var articles = this.dbContext.Articles;
 
             // Assert
@@ -36,9 +36,9 @@ namespace LzLeague.Tests.Services
             var articlesService = new ArticlesService(this.dbContext);
 
             // Act 
-            await articlesService.Create(new Article { Title = "TestTile1", Content = "TestContent1" });
-            await articlesService.Create(new Article { Title = "TestTile2", Content = "TestContent2" });
-            await articlesService.Create(new Article { Title = "TestTile3", Content = "TestContent3" });
+            await articlesService.Create(new Article { Title = "TestTitle1", Content = "TestContent1" });
+            await articlesService.Create(new Article { Title = "TestTitle2", Content = "TestContent2" });
+            await articlesService.Create(new Article { Title = "TestTitle3", Content = "TestContent3" });
 
             var articles = this.dbContext.Articles;
 
@@ -53,8 +53,9 @@ namespace LzLeague.Tests.Services
             var articlesService = new ArticlesService(this.dbContext);
             var articles = this.dbContext.Articles;
 
-            await articlesService.Create(new Article { Title = "TestTile1", Content = "TestContent1" });
-            await articlesService.Create(new Article { Title = "ArticleToDelete", Content = "DeleteContent" });
+            articles.Add(new Article { Title = "TestTitle1", Content = "TestContent1" });
+            articles.Add(new Article { Title = "ArticleToDelete", Content = "DeleteContent" });
+            await this.dbContext.SaveChangesAsync();
 
             var articleToDelete = this.dbContext
                 .Articles
@@ -65,6 +66,58 @@ namespace LzLeague.Tests.Services
 
             // Assert
             Assert.AreEqual(false, articles.Any(a => a.Title == "ArticleToDelete"));
+        }
+
+        [TestMethod]
+        public async Task GetArticleByIdTest()
+        {
+            // Arrange
+            var articlesService = new ArticlesService(this.dbContext);
+
+            this.dbContext.Articles.Add(new Article { Title = "TestTitle1", Content = "TestContent1" });
+            this.dbContext.Articles.Add(new Article { Title = "TestTitle2", Content = "TestContent2" });
+            await this.dbContext.SaveChangesAsync();
+
+            // Act
+            var article = await articlesService.GetArticle(1);
+
+            // Assert
+            Assert.AreEqual("TestTitle1", article.Title);
+        }
+
+        [TestMethod]
+        public async Task GetArticleById_ShouldReturnNull_Test()
+        {
+            // Arrange
+            var articlesService = new ArticlesService(this.dbContext);
+
+            this.dbContext.Articles.Add(new Article { Title = "TestTitle1", Content = "TestContent1" });
+            this.dbContext.Articles.Add(new Article { Title = "TestTitle2", Content = "TestContent2" });
+            await this.dbContext.SaveChangesAsync();
+
+            // Act
+            var article = await articlesService.GetArticle(15);
+
+            // Assert
+            Assert.AreEqual(null, article);
+        }
+
+        [TestMethod]
+        public async Task GetAllArticlesTest()
+        {
+            // Arrange
+            var articlesService = new ArticlesService(this.dbContext);
+
+            this.dbContext.Articles.Add(new Article { Title = "TestTitle1", Content = "TestContent1" });
+            this.dbContext.Articles.Add(new Article { Title = "TestTitle2", Content = "TestContent2" });
+            this.dbContext.Articles.Add(new Article { Title = "TestTitle3", Content = "TestContent3" });
+            await this.dbContext.SaveChangesAsync();
+
+            // Act
+            var articles = articlesService.GetAll();
+
+            // Assert
+            Assert.AreEqual(3, articles.Count);
         }
 
         [TestInitialize]

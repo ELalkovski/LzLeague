@@ -75,10 +75,6 @@
             //Custom Services
             services.AddAutoMapper();
 
-            //services.Configure<AuthMessageSenderOptions>(this.Configuration);
-            
-            
-
             services.AddScoped<IAdminAccountService, AdminAccountService>();
             services.AddScoped<ITeamsService, TeamsService>();
             services.AddScoped<IMatchService, MatchService>();
@@ -128,7 +124,6 @@
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
-                
             });
         }
     }
