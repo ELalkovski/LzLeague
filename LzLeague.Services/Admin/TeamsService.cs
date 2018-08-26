@@ -35,6 +35,13 @@
                 .Include(g => g.GroupWinnerPredictions)
                 .ToList();
 
+            foreach (var group in groups)
+            {
+                group.Teams = group.Teams
+                    .OrderByDescending(t => t.Points)
+                    .ToList();
+            }
+
             return groups;
         }
 
