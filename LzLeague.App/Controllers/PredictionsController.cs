@@ -69,6 +69,7 @@
             var userId = this.userManager.GetUserId(this.User);
 
             await this.ps.CreateUserPrediction(userId, model);
+            this.TempData["SuccessMsg"] = "Your prediction was submitted successfully.";
 
             return this.RedirectToAction("UserPrediction");
         }

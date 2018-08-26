@@ -161,8 +161,8 @@
             {
                 PredictionId = predictionId,
                 MatchId = model.MatchId,
-                Result = model.Result,
-                WinnerSign = model.Sign
+                Result = model.PredictionResult,
+                WinnerSign = model.PredictionSign
             };
 
             this.db.MatchesResultsPredictions.Add(matchResult);

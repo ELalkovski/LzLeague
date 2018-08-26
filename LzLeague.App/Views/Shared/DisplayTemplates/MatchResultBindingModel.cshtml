@@ -15,15 +15,40 @@
     </label>
     <label class="col-md-2 form-check-inline">
         <span>
-            <b>Group</b> <span class="form-match-result">@Model.Match.Group.Name</span>
+            <b>Group</b> 
+            <span class="form-match-result" style="color: @(Model.Match.Group.Name == "A" ? "red" :
+                       (Model.Match.Group.Name == "B" ? "blue" : 
+                       (Model.Match.Group.Name == "C" ? "green" : 
+                       (Model.Match.Group.Name == "D" ? "yellow" : 
+                       (Model.Match.Group.Name == "E" ? "orange" :
+                       (Model.Match.Group.Name == "F" ? "brown" :
+                       (Model.Match.Group.Name == "G" ? "purple" : "black")))))))">
+                @Model.Match.Group.Name
+            </span>
         </span>
     </label>
     <label class="col-md-4 offset-md-1 form-check-inline">
         <span style="font-size: 1.1em"><em>@Model.Match.HomeTeam </em> - <em>@Model.Match.AwayTeam</em></span>
     </label>
     <div class="form-check-inline float-md-right">
-        <input asp-for="Result" type="text" placeholder="Score" style="width: 5em" class="form-control"/>
-        <input asp-for="Sign" type="text" placeholder="Result" class="form-control" style="width: 5em"/>
+        @if (Model.Match.Result != null && Model.Match.Result == Model.PredictionResult)
+        {
+            <i class="fas fa-check" style="margin-right: 6px"></i>
+        }
+        else if (Model.Match.Result != null && Model.Match.Result != Model.PredictionResult)
+        {
+            <i class="fas fa-times" style="margin-right: 6px"></i>
+        }
+        <input asp-for="PredictionResult" type="text" placeholder="Score" style="width: 5em" class="form-control" />
+        <input asp-for="PredictionSign" type="text" placeholder="Result" class="form-control" style="width: 5em" />
+        @if (Model.Match.WinnerSign != null && Model.Match.WinnerSign == Model.PredictionSign)
+        {
+            <i class="fas fa-check"></i>
+        }
+        else if (Model.Match.WinnerSign != null && Model.Match.WinnerSign != Model.PredictionSign)
+        {
+            <i class="fas fa-times" style="margin-right: 5px"></i>
+        }
     </div>
 </div>
 <hr />

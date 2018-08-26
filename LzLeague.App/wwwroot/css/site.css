@@ -72,7 +72,6 @@
 }
 
 .form-match-result {
-    color: #4C6990;
     font-weight: bold;
     font-size: 1.1em
 }
@@ -115,4 +114,13 @@ label {
 
 #team-details > span.float-md-right {
     color: grey
+}
+
+i.fas.fa-check {
+    margin-left: 5px;
+    color: green;
+}
+i.fas.fa-times {
+    margin-left: 5px;
+    color: red;
 }

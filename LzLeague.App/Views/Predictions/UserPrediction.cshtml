@@ -13,6 +13,8 @@
             <div class="alert alert-warning">
                 <strong>Warning!</strong> Once you've submitted the form, you will not be able to make corrections on it. If you made a mistake, please contact admin.
             </div>
+            <div id="success-msg-user-prediction" class="alert alert-success" style="display: none">
+            </div>
             <div class="card shadow-lg">
                 <div class="card-header">
                     <h5>Matches Results</h5>
@@ -47,6 +49,9 @@
 @section Scripts
     {
     <script>
+        let successMsg = '@TempData["SuccessMsg"]';
+        displayMsg(successMsg, 'success-msg-user-prediction');
+
         let groupsBody = $('div.card-body').toArray()[1];
         let formGroups = $(groupsBody).find('div.form-group');
         let groupsIds = $(formGroups).find('input[name=GroupId]').toArray();

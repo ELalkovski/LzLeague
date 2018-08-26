@@ -7,7 +7,16 @@
     <input asp-for="GroupId" name="GroupId" value="@Model.GroupId" hidden="hidden"/>
     <label class="col-md-1 form-check-inline">
         <span>
-            <b>Group</b> <span class="form-match-result">@Model.Group.Name</span>
+            <b>Group</b> 
+            <span class="form-match-result" style="color: @(Model.Group.Name == "A" ? "red" :
+                       (Model.Group.Name == "B" ? "blue" : 
+                       (Model.Group.Name == "C" ? "green" : 
+                       (Model.Group.Name == "D" ? "brown" : 
+                       (Model.Group.Name == "E" ? "orange" :
+                       (Model.Group.Name == "F" ? "#C3DE3E" :
+                       (Model.Group.Name == "G" ? "purple" : "#FF9999")))))))">
+                @Model.Group.Name
+            </span>
         </span>
     </label>
     <div class="col-md-3 form-check-inline">

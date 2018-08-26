@@ -9,7 +9,8 @@
         public MatchResultPredictionProfile()
         {
             this.CreateMap<MatchResultPrediction, MatchResultBindingModel>()
-                .ForMember(dest => dest.Sign, opt => opt.MapFrom(x => x.WinnerSign))
+                .ForMember(dest => dest.PredictionSign, opt => opt.MapFrom(x => x.WinnerSign))
+                .ForMember(dest => dest.PredictionResult, opt => opt.MapFrom(x => x.Result))
                 .ReverseMap();
         }
     }

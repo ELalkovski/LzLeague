@@ -8,10 +8,10 @@
     <td style="font-weight: bold; color:@(Model.Group.Name == "A" ? "red" :
                        (Model.Group.Name == "B" ? "blue" : 
                        (Model.Group.Name == "C" ? "green" : 
-                       (Model.Group.Name == "D" ? "yellow" : 
+                       (Model.Group.Name == "D" ? "brown" : 
                        (Model.Group.Name == "E" ? "orange" :
-                       (Model.Group.Name == "F" ? "brown" :
-                       (Model.Group.Name == "G" ? "purple" : "black")))))))">
+                       (Model.Group.Name == "F" ? "#C3DE3E" :
+                       (Model.Group.Name == "G" ? "purple" : "#FF9999")))))))">
         @Model.Group.Name
     </td>
     @if (User.IsInRole("Admin") && Model.Result == null)
@@ -20,28 +20,28 @@
             <a href="#" data-toggle="modal" data-target="#modal-delete-match-@Model.Id" style="text-decoration: none">
                 <i class="fas fa-minus-circle" style="color: red"></i>
             </a>
+            
+            <div class="modal fade" id="modal-delete-match-@Model.Id" tabindex="-1" role="dialog" aria-labelledby="confirmation-modal-match-label" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Delete Match</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to delete this match?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <a btn-name="delete-match-btn" asp-area="Admin" asp-controller="Matches" asp-action="Delete" asp-route-matchId="@Model.Id" class="btn btn-danger">
+                                Delete Match
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </td>
     }
 </tr>
-
-<div class="modal fade" id="modal-delete-match-@Model.Id" tabindex="-1" role="dialog" aria-labelledby="confirmation-modal-match-label" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Delete Match</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                Are you sure you want to delete this match?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <a btn-name="delete-match-btn" asp-area="Admin" asp-controller="Matches" asp-action="Delete" asp-route-matchId="@Model.Id" class="btn btn-danger">
-                    Delete Match
-                </a>
-            </div>
-        </div>
-    </div>
-</div>

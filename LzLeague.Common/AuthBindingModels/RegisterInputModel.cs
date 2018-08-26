@@ -1,4 +1,4 @@
-﻿namespace LzLeague.App.Areas.Identity.BindingModels
+﻿namespace LzLeague.Common.AuthBindingModels
 {
     using System.ComponentModel.DataAnnotations;
 

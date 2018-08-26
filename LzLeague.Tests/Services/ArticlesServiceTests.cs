@@ -16,7 +16,7 @@ namespace LzLeague.Tests.Services
         private LzLeagueContext dbContext;
 
         [TestMethod]
-        public async Task AddSingleArticleTest()
+        public async Task AddSingleArticle_Test()
         {
             // Arrange
             var articlesService = new ArticlesService(this.dbContext);
@@ -30,15 +30,15 @@ namespace LzLeague.Tests.Services
         }
 
         [TestMethod]
-        public async Task AddMultipleArticlesTest()
+        public async Task AddMultipleArticles_Test()
         {
             // Arrange
             var articlesService = new ArticlesService(this.dbContext);
 
             // Act 
-            await articlesService.Create(new Article { Title = "TestTitle1", Content = "TestContent1" });
             await articlesService.Create(new Article { Title = "TestTitle2", Content = "TestContent2" });
             await articlesService.Create(new Article { Title = "TestTitle3", Content = "TestContent3" });
+            await articlesService.Create(new Article { Title = "TestTitle4", Content = "TestContent4" });
 
             var articles = this.dbContext.Articles;
 
@@ -47,13 +47,12 @@ namespace LzLeague.Tests.Services
         }
 
         [TestMethod]
-        public async Task DeleteArticleTest()
+        public async Task DeleteArticle_Test()
         {
             // Arrange
             var articlesService = new ArticlesService(this.dbContext);
             var articles = this.dbContext.Articles;
 
-            articles.Add(new Article { Title = "TestTitle1", Content = "TestContent1" });
             articles.Add(new Article { Title = "ArticleToDelete", Content = "DeleteContent" });
             await this.dbContext.SaveChangesAsync();
 
@@ -69,20 +68,19 @@ namespace LzLeague.Tests.Services
         }
 
         [TestMethod]
-        public async Task GetArticleByIdTest()
+        public async Task GetArticleById_Test()
         {
             // Arrange
             var articlesService = new ArticlesService(this.dbContext);
 
-            this.dbContext.Articles.Add(new Article { Title = "TestTitle1", Content = "TestContent1" });
-            this.dbContext.Articles.Add(new Article { Title = "TestTitle2", Content = "TestContent2" });
+            this.dbContext.Articles.Add(new Article { Title = "GetTitle", Content = "GetContent" });
             await this.dbContext.SaveChangesAsync();
 
             // Act
             var article = await articlesService.GetArticle(1);
 
             // Assert
-            Assert.AreEqual("TestTitle1", article.Title);
+            Assert.AreEqual("GetTitle", article.Title);
         }
 
         [TestMethod]
@@ -103,7 +101,7 @@ namespace LzLeague.Tests.Services
         }
 
         [TestMethod]
-        public async Task GetAllArticlesTest()
+        public async Task GetAllArticles_Test()
         {
             // Arrange
             var articlesService = new ArticlesService(this.dbContext);

@@ -72,7 +72,6 @@
             // Arrange
             var matchesService = new MatchService(this.dbContext);
 
-            // Act 
             this.dbContext.Matches.Add(new Match
             {
                 HomeTeam = "Manchester United",
@@ -82,6 +81,7 @@
             });
             await this.dbContext.SaveChangesAsync();
 
+            // Act 
             var match = await matchesService.GetMatch(1);
 
             // Assert
@@ -94,7 +94,6 @@
             // Arrange
             var matchesService = new MatchService(this.dbContext);
 
-            // Act 
             this.dbContext.Matches.Add(new Match
             {
                 HomeTeam = "Manchester United",
@@ -118,10 +117,35 @@
             });
             await this.dbContext.SaveChangesAsync();
 
+            // Act 
             var matches = matchesService.GetAllMatches();
 
             // Assert
             Assert.AreEqual(3, matches.Count);
+        }
+
+        [TestMethod]
+        public async Task DeleteMatch_Test()
+        {
+            // Arrange
+            var matchesService = new MatchService(this.dbContext);
+
+            this.dbContext.Matches.Add(new Match
+            {
+                HomeTeam = "Manchester United",
+                AwayTeam = "CSKA Moscow",
+                BeginTime = new TimeSpan(DateTime.UtcNow.Hour, DateTime.UtcNow.Minute, DateTime.UtcNow.Second),
+                Date = DateTime.UtcNow
+            });
+
+            await this.dbContext.SaveChangesAsync();
+            var match = this.dbContext.Matches.FirstOrDefault(m => m.HomeTeam == "Manchester United" && m.AwayTeam == "CSKA Moscow");
+
+            // Act 
+            await matchesService.Delete(match);
+
+            // Assert
+            Assert.AreEqual(false, this.dbContext.Matches.Any(m => m.HomeTeam == "Manchester United" && m.AwayTeam == "CSKA Moscow"));
         }
 
         [TestInitialize]

@@ -13,9 +13,9 @@
         public MatchBindingModel Match { get; set; }
 
         [Required]
-        public string Result { get; set; }
+        public string PredictionResult { get; set; }
 
         [Required]
-        public string Sign { get; set; }
+        public string PredictionSign { get; set; }
     }
 }
