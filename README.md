@@ -1,2 +1,3 @@
 # LzLeague
-Final Project for the Software University
+Final Project that I've made for the Software University. This is sports application that allow me
+and my friends to predict the outcome (scores, results, group winners, europa league qualifiers) of the group stage for the Champions League. 
