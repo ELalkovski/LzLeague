@@ -34,21 +34,28 @@
         [TempData]
         public string ErrorMessage { get; set; }
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public async Task<IActionResult> OnGetAsync(string returnUrl = null)
         {
-            if (!string.IsNullOrEmpty(this.ErrorMessage))
+            if (!User.Identity.IsAuthenticated)
             {
-                this.ModelState.AddModelError(string.Empty, this.ErrorMessage);
+                if (!string.IsNullOrEmpty(this.ErrorMessage))
+                {
+                    this.ModelState.AddModelError(string.Empty, this.ErrorMessage);
+                }
+
+                returnUrl = returnUrl ?? Url.Content("~/");
+
+                // Clear the existing external cookie to ensure a clean login process
+                await this.HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+
+                this.ExternalLogins = (await this._signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
+                this.ReturnUrl = returnUrl;
+
+                return this.Page();
             }
 
-            returnUrl = returnUrl ?? Url.Content("~/");
-
-            // Clear the existing external cookie to ensure a clean login process
-            await this.HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
-
-            this.ExternalLogins = (await this._signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-
-            this.ReturnUrl = returnUrl;
+            return this.LocalRedirect("~/");
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)

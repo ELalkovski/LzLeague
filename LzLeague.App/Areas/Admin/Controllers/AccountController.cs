@@ -20,6 +20,11 @@
         [AllowAnonymous]
         public IActionResult Login()
         {
+            if (this.User.Identity.IsAuthenticated)
+            {
+                return this.RedirectToAction("Index", "Home", new { area = "" });
+            }
+
             var model = new LoginBindingModel();
 
             return this.View(model);
@@ -42,7 +47,7 @@
                 return this.View(model);
             }
 
-            return RedirectToAction("Index", "Home", new {area = ""});
+            return RedirectToAction("Index", "Home", new { area = "" });
         }
     }
 }
