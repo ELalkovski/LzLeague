@@ -6,7 +6,7 @@
 
 
 <div class="row" style="margin-top: 20px; margin-bottom: 20px">
-    <div class="col-md-6 col-xs-2 offset-md-1">
+    <div class=" col-lg-7 col-md-6 col-xs-2 offset-md-1">
         <h2>@ViewData["Title"]</h2>
         <div id="success-msg-teams" class="alert alert-success" style="display: none">
         </div>
@@ -17,7 +17,7 @@
     </div>
     @if (User.IsInRole("Admin"))
     {
-        <div class="col-md-2 offset-md-1">
+        <div class="col-md-2 offset-md-1 offset-lg-0">
             <div class="card">
                 <div class="card-header admin-header d-flex justify-content-center">
                     <h5><b>Actions</b></h5>
@@ -33,7 +33,7 @@
 </div>
 
 <div class="row">
-    <div class="col-md-3 offset-md-8">
+    <div class="col-md-3 offset-md-8 offset-lg-9">
         <button id="go-top-btn" class="btn btn-info">
             <i class="fas fa-chevron-circle-up"></i>
         </button>

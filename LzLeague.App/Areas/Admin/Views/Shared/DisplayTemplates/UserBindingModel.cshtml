@@ -5,11 +5,18 @@
     <td style="color: green; font-weight: bold">@Model.FullName</td>
     <td>@Model.Email</td>
     <td>
-        <a asp-area="Admin" 
-           asp-controller="Users" 
-           asp-action="EditPrediction" 
-           asp-route-predictionId="@Model.PredictionId" class="btn btn-warning">
-            Prediction
-        </a>
+        @if (Model.PredictionId != null)
+        {
+            <a asp-area="Admin"
+               asp-controller="Users"
+               asp-action="EditPrediction"
+               asp-route-predictionId="@Model.PredictionId" class="btn btn-warning">
+                Prediction
+            </a>
+        }
+        else
+        {
+            <p>No Prediction</p>
+        }
     </td>
 </tr>

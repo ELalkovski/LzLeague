@@ -32,7 +32,7 @@
         {
             var users = this.us
                 .GetUsers()
-                .Where(u => u.PredictionId != null)
+                .Where(u => u.Email != "emil27778@gmail.com")
                 .ToList();
 
             var usersVm = this.mapper
@@ -46,6 +46,13 @@
         public async Task<IActionResult> EditPrediction(int predictionId)
         {
             var prediction = await this.ps.GetPrediction(predictionId);
+
+            if (prediction == null)
+            {
+                this.TempData["WarningMsg"] = "No prediction";
+                return this.RedirectToAction("Index");
+            }
+
             var predictionVm = this.mapper
                 .Map<Prediction, PredictionBindingModel>(prediction);
 

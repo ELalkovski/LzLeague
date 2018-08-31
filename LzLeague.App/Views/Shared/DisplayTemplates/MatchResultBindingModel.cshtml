@@ -13,7 +13,7 @@
     <label class="form-check-inline">
         @Model.Match.Date.Value.ToShortDateString() / @Model.Match.BeginTime.Value.Hours:@Model.Match.BeginTime.Value.Minutes
     </label>
-    <label class="col-md-2 form-check-inline">
+    <label class="col-md-2 col-lg-2 form-check-inline">
         <span>
             <b>Group</b> 
             <span class="form-match-result" style="color: @(Model.Match.Group.Name == "A" ? "red" :
@@ -27,7 +27,7 @@
             </span>
         </span>
     </label>
-    <label class="col-md-4 offset-md-1 form-check-inline">
+    <label class="col-md-4 col-lg-4 offset-md-1 offset-lg-0 form-check-inline">
         <span style="font-size: 1.1em"><em>@Model.Match.HomeTeam </em> - <em>@Model.Match.AwayTeam</em></span>
     </label>
     <div class="form-check-inline float-md-right">
