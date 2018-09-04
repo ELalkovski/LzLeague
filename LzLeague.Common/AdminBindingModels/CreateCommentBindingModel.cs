@@ -1,21 +1,18 @@
-﻿namespace LzLeague.Models
+﻿namespace LzLeague.Common.AdminBindingModels
 {
     using System;
     using System.ComponentModel.DataAnnotations;
+    using Models;
 
-    public class Comment
+    public class CreateCommentBindingModel
     {
-        public int Id { get; set; }
-
-        [Required]
-        public string AuthorId { get; set; }
-        public ApplicationUser Author { get; set; }
-
         [Required]
         public int ArticleId { get; set; }
         public Article Article { get; set; }
 
-        [Required]
+        public string AuthorId { get; set; }
+        public ApplicationUser Author { get; set; }
+
         public DateTime PublicationDate { get; set; }
 
         [Required]

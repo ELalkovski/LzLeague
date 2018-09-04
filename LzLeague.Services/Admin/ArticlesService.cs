@@ -23,6 +23,12 @@
             await this.db.SaveChangesAsync();
         }
 
+        public async Task CreateComment(Comment comment)
+        {
+            this.db.Comments.Add(comment);
+            await this.db.SaveChangesAsync();
+        }
+
         public ICollection<Article> GetAll()
         {
             return this.db
@@ -36,13 +42,41 @@
             await this.db.SaveChangesAsync();
         }
 
+        public async Task DeleteAllArticlesComments(int articleId)
+        {
+            var comments = this.db.Comments
+                .Where(c => c.ArticleId == articleId);
+
+            this.db.Comments.RemoveRange(comments);
+            await this.db.SaveChangesAsync();
+        }
+
         public async Task<Article> GetArticle(int id)
         {
             var article = await this.db
                 .Articles
+                .Include(a => a.Comments)
+                .ThenInclude(c => c.Author)
                 .FirstOrDefaultAsync(a => a.Id == id);
 
             return article;
+        }
+
+        public async Task<Comment> GetComment(int id)
+        {
+            var comment = await this.db
+                .Comments
+                .Include(c => c.Article)
+                .Include(c => c.Author)
+                .FirstOrDefaultAsync(c => c.Id == id);
+
+            return comment;
+        }
+
+        public async Task DeleteComment(Comment comment)
+        {
+            this.db.Comments.Remove(comment);
+            await this.db.SaveChangesAsync();
         }
     }
 }

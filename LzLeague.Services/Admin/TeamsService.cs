@@ -92,7 +92,7 @@
             var awayTeam = await this.GetTeamByName(awayTeamName);
             var goalsArgs = score
                 .Split(':')
-                .Select(x => int.Parse(x))
+                .Select(int.Parse)
                 .ToList();
 
             homeTeam.GoalsScored += goalsArgs[0];
@@ -158,6 +158,8 @@
                 .Teams
                 .OrderByDescending(t => t.Points)
                 .ThenByDescending(t => t.GoalsScored - t.GoalsReceived)
+                .ThenByDescending(t => t.GoalsScored)
+                .ThenByDescending(t => t.Wins)
                 .ToList();
 
             for (int i = 0; i < group.Teams.Count; i++)

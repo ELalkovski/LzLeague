@@ -6,39 +6,66 @@
 
 <div class="row" style="margin-top: 2em">
     <div class="col-md-10 offset-md-1">
+        <div id="success-msg-articles" class="alert alert-success" style="display: none">
+        </div>
+        <div id="warning-msg-articles" class="alert alert-danger" style="display: none">
+        </div>
+        @if (User.IsInRole("Admin"))
+        {
+            <div class="row">
+                <a class="btn btn-success" asp-area="" asp-controller="Articles" asp-action="Add">Add New Article</a>
+            </div>
+            <br />
+        }
+
         @{
             foreach (var article in Model)
             {
                 if (index == 1)
                 {
                     @:<div class="row" style="margin-bottom: 3em">
-                }
-                <div class="col-md-4" id="home-article">
-                    <div class="card shadow-lg">
-                        <div class="card-header">
-                            <a asp-area="" asp-controller="Articles" asp-action="Read" asp-route-articleId="@article.Id" style="text-decoration: none">
-                                <img class="card-img" src="@(article.CoverUrl ?? "https://img.uefa.com/imgml/uefacom/ucl/social/og-default.jpg")" />
-                            </a>
-                        </div>
-                        <div class="card-body">
-                            <a asp-area="" asp-controller="Articles" asp-action="Read" asp-route-articleId="@article.Id" style="text-decoration: none; color:white">
-                                <h5 class="card-title">@article.Title</h5>
-                            </a>
+                    }
+                    <div class="col-md-4" id="home-article">
+                        <div class="card shadow-lg">
+                            <div class="card-header">
+                                <a asp-area="" asp-controller="Articles" asp-action="Read" asp-route-articleId="@article.Id" style="text-decoration: none">
+                                    <img class="card-img" src="@(article.CoverUrl ?? "https://img.uefa.com/imgml/uefacom/ucl/social/og-default.jpg")" />
+                                </a>
+                            </div>
+                            <div class="card-body">
+                                <a asp-area="" asp-controller="Articles" asp-action="Read" asp-route-articleId="@article.Id" style="text-decoration: none; color: white">
+                                    <h5 class="card-title">@article.Title</h5>
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
-                if (index % 3 == 0)
-                {
-                    @:</div><br/><div class="row" style="margin-bottom: 3em">
-                        
-                }
-                index++;
+                    if (index % 3 == 0)
+                    {
+                    @:</div><br /><div class="row" style="margin-bottom: 3em">
 
-            }
+
+
+
+                    }
+                    index++;
+
+                }
         }
         @if (index < 3)
         {
-            @:</div>
-        }
+        @:</div>
+    }
     </div>
 </div>
+
+@section Scripts
+    {
+    <script>
+        let successMsg = '@TempData["SuccessMsg"]';
+        let warningMsg = '@TempData["WarningMsg"]';
+
+        displayMsg(successMsg, 'success-msg-articles');
+        displayMsg(warningMsg, 'warning-msg-articles');
+
+    </script>
+}

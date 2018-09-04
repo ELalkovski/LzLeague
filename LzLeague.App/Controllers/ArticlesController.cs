@@ -1,5 +1,6 @@
 ﻿namespace LzLeague.App.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -8,32 +9,22 @@
     using LzLeague.Models;
     using LzLeague.Services.Admin.Contracts;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
     public class ArticlesController : Controller
     {
         private readonly IArticlesService _as;
         private readonly IMapper mapper;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public ArticlesController(IArticlesService _as, IMapper mapper)
+        public ArticlesController(IArticlesService _as, IMapper mapper, UserManager<ApplicationUser> userManager)
         {
             this._as = _as;
             this.mapper = mapper;
+            this.userManager = userManager;
         }
         
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult Index()
-        {
-            var articles = this._as.GetAll();
-            var articlesVm = this.mapper
-                .Map<ICollection<Article>, ICollection<ArticleBindingModel>>(articles)
-                .OrderByDescending(a => a.Id)
-                .ToList();
-
-            return this.View(articlesVm);
-        }
-
         [HttpGet]
         [Authorize(Roles = "Admin")]
         public IActionResult Add()
@@ -57,7 +48,30 @@
             await this._as.Create(article);
             this.TempData["SuccessMsg"] = "Article has been created successfully.";
 
-            return this.RedirectToAction("Index");
+            return this.RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin, User")]
+        public async Task<IActionResult> AddComment(CreateCommentBindingModel model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.RedirectToAction("Read", new { articleId = model.ArticleId });
+            }
+
+            var authorId = this.userManager.GetUserId(this.User);
+            var comment = new Comment
+            {
+                ArticleId = model.ArticleId,
+                AuthorId = authorId,
+                Content = model.Content,
+                PublicationDate = DateTime.UtcNow
+            };
+
+            await this._as.CreateComment(comment);
+
+            return this.RedirectToAction("Read", new { articleId = model.ArticleId });
         }
 
         [HttpGet]
@@ -74,6 +88,11 @@
 
             var articleVm = this.mapper.Map<Article, ArticleBindingModel>(article);
 
+            articleVm.Comments = articleVm
+                .Comments
+                .OrderByDescending(c => c.PublicationDate)
+                .ToList();
+
             return this.View(articleVm);
         }
 
@@ -89,10 +108,29 @@
                 return this.RedirectToAction("Read", new { articleId });
             }
 
+            await this._as.DeleteAllArticlesComments(articleId);
             await this._as.Delete(article);
             this.TempData["SuccessMsg"] = "Article has been deleted successfully.";
 
-            return this.RedirectToAction("Index");
+            return this.RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteComment(int commentId, int articleId)
+        {
+            var comment = await this._as.GetComment(commentId);
+
+            if (comment == null)
+            {
+                this.TempData["WarningMsg"] = "Comment you are trying to reach doesn't exist";
+                return this.RedirectToAction("Read", new { articleId });
+            }
+            
+            await this._as.DeleteComment(comment);
+            this.TempData["SuccessMsg"] = "Comment has been deleted successfully.";
+
+            return this.RedirectToAction("Read", new { articleId });
         }
     }
 }

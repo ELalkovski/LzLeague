@@ -5,6 +5,10 @@
 
 <div class="row" style="margin-top: 20px; margin-bottom: 40px">
     <div class="col-md-8 col-xs-2 offset-md-1">
+        <div id="success-msg-read" class="alert alert-success" style="display: none">
+        </div>
+        <div id="warning-msg-read" class="alert alert-danger" style="display: none">
+        </div>
         <div class="card shadow-lg bg-white rounded">
             <img src="@(Model.CoverUrl ?? "https://img.uefa.com/imgml/uefacom/ucl/social/og-default.jpg")" class="card-img" />
             <div class="card-body">
@@ -12,13 +16,37 @@
                 <blockquote class="blockquote-reverse">
                     <p class="card-text">@Model.Content</p>
                 </blockquote>
-                <a asp-area="" asp-controller="Articles" asp-action="Index" class="btn btn-primary">News</a>
+                <a asp-area="" asp-controller="Home" asp-action="Index" style="font-weight: bold; font-size: 20px"><em>News</em></a>
                 @if (User.IsInRole("Admin"))
                 {
-                    <a class="btn btn-danger" data-toggle="modal" data-target="#confirmation-modal-article">
+                    <a class="btn btn-danger float-md-right" style="color: white" data-toggle="modal" data-target="#confirmation-modal-article">
                         Delete
                     </a>
                 }
+            </div>
+            <div class="card-footer">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <form asp-area="" asp-controller="Articles" asp-action="AddComment" method="post">
+                        <input asp-for="CreateCommentModel.ArticleId" name="ArticleId" value="@Model.Id" hidden />
+                        <div class="form-group">
+                            <textarea asp-for="CreateCommentModel.Content" name="Content"
+                                      placeholder="@(Model.Comments.Count == 0 ? "Be the first to leave a comment..." : "Feel free to let us know what you think...")" class="form-control" style="height: 6em"></textarea>
+                            <span asp-validation-for="Content" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-info float-md-right" type="submit">Add Comment</button>
+                        </div>
+                    </form>
+                }
+                <br />
+                <div class="blog-comment">
+                    <h3 class="text-success">Comments</h3>
+                    <hr />
+                    <ul class="comments">
+                        @Html.DisplayFor(model => model.Comments)
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -48,3 +76,13 @@
         </div>
     </div>
 </div>
+
+@section Scripts
+{
+    <script>
+        let successMsg = '@TempData["SuccessMsg"]';
+        let warningMsg = '@TempData["WarningMsg"]';
+        displayMsg(successMsg, 'success-msg-read');
+        displayMsg(warningMsg, 'warning-msg-read');
+    </script>
+}

@@ -16,6 +16,8 @@
 
         public string CoverUrl { get; set; }
 
-        public ICollection<Comment> Comments { get; set; }
+        public CreateCommentBindingModel CreateCommentModel { get; set; }
+
+        public ICollection<CommentBindingModel> Comments { get; set; }
     }
 }
