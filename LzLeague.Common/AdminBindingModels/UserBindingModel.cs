@@ -10,6 +10,8 @@
 
         public int TotalScore { get; set; }
 
+        public bool IsApproved { get; set; }
+
         public int? PredictionId { get; set; }
         public Prediction Prediction { get; set; }
     }

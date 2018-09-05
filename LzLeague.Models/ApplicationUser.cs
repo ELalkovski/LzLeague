@@ -10,5 +10,7 @@
 
         public int? PredictionId { get; set; }
         public Prediction Prediction { get; set; }
+
+        public bool IsApproved { get; set; }
     }
 }

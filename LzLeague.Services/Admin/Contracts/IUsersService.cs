@@ -8,6 +8,12 @@
     {
         ICollection<ApplicationUser> GetUsers();
 
+        Task<ApplicationUser> GetUserByEmail(string email);
+
+        Task Delete(ApplicationUser user);
+
+        Task UpdateUser(ApplicationUser user);
+
         Task UpdateUserPrediction(ICollection<MatchResultPrediction> matchesResults, ICollection<GroupWinnerPrediction> groupWinners);
     }
 }

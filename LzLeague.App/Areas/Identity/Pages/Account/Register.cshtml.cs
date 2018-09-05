@@ -77,11 +77,13 @@
                     }
                     else
                     {
+                        user.IsApproved = true;
+                        await this._userManager.UpdateAsync(user);
                         await this._userManager.AddToRoleAsync(user, "Admin");
                     }
 
-                    await this._signInManager.SignInAsync(user, isPersistent: false);
-                    return this.LocalRedirect(returnUrl);
+                    //await this._signInManager.SignInAsync(user, isPersistent: false);
+                    return this.RedirectToPage("/Account/Login");
                 }
 
                 foreach (var error in result.Errors)

@@ -25,6 +25,21 @@
                 .ToList();
         }
 
+        public async Task Delete(ApplicationUser user)
+        {
+            await this.DeleteUserPrediction(user);
+            this.db.Users.Remove(user);
+            await this.db.SaveChangesAsync();
+        }
+        
+        public async Task<ApplicationUser> GetUserByEmail(string email)
+        {
+            return await this.db
+                .Users
+                .Include(u => u.Prediction)
+                .FirstOrDefaultAsync(u => u.Email == email);
+        }
+
         public async Task UpdateUserPrediction(
             ICollection<MatchResultPrediction> matchesResults, 
             ICollection<GroupWinnerPrediction> groupWinners)
@@ -33,6 +48,46 @@
             await this.UpdateUserGroupsWinners(groupWinners);
         }
 
+        public async Task UpdateUser(ApplicationUser user)
+        {
+            this.db.Users.Update(user);
+            await this.db.SaveChangesAsync();
+        }
+
+        private async Task DeleteUserPrediction(ApplicationUser user)
+        {
+            var prediction = await this.db
+                .Predictions
+                .FirstOrDefaultAsync(p => p.OwnerId == user.Id);
+
+            // Remove all prediction's children.
+            await this.DeleteUserMatchesResultsPredictions(prediction);
+            await this.DeleteUserGroupWinnersPredictions(prediction);
+
+            this.db.Predictions.Remove(prediction);
+            await this.db.SaveChangesAsync();
+        }
+
+        private async Task DeleteUserMatchesResultsPredictions(Prediction prediction)
+        {
+            var matchesResultsPrediction = this.db
+                .MatchesResultsPredictions
+                .Where(mrp => mrp.PredictionId == prediction.Id);
+
+            this.db.MatchesResultsPredictions.RemoveRange(matchesResultsPrediction);
+            await this.db.SaveChangesAsync();
+        }
+
+        private async Task DeleteUserGroupWinnersPredictions(Prediction prediction)
+        {
+            var groupWinnersPredictions = this.db
+                .GroupsWinnersPredictions
+                .Where(gwp => gwp.PredictionId == prediction.Id);
+
+            this.db.GroupsWinnersPredictions.RemoveRange(groupWinnersPredictions);
+            await this.db.SaveChangesAsync();
+        }
+        
         private async Task UpdateUserGroupsWinners(ICollection<GroupWinnerPrediction> groupWinners)
         {
             foreach (var modifiedGroupWinner in groupWinners)

@@ -16,7 +16,130 @@
         }
         else
         {
-            <p>No Prediction</p>
+            <a href="#" class="btn btn-default disabled">No Prediction</a>
+        }
+
+        <a class="btn btn-danger" style="color: white" data-toggle="modal" data-target="#confirmation-modal-user-@Model.FullName">
+            Delete
+        </a>
+        @if (Model.PredictionId == null)
+        {
+            <a class="btn btn-info" style="color: white" data-toggle="modal" data-target="#confirmation-promote-user-@Model.FullName">
+                Promote Admin
+            </a>
+        }
+
+        @if (!Model.IsApproved)
+        {
+            <a class="btn btn-success" style="color: white" data-toggle="modal" data-target="#confirmation-approve-user-@Model.FullName">
+                Approve
+            </a>
+        }
+        else
+        {
+            <a class="btn btn-danger" style="color: white" data-toggle="modal" data-target="#confirmation-ban-user-@Model.FullName">
+                Ban
+            </a>
         }
     </td>
 </tr>
+
+<div class="modal fade" id="confirmation-modal-user-@Model.FullName" tabindex="-1" role="dialog" aria-labelledby="confirmation-modal-user-label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteUser">Delete User</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete <span style="font-weight: bold">@(Model.FullName)</span>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a asp-area="Admin"
+                   asp-controller="Users"
+                   asp-action="Delete"
+                   asp-route-email="@Model.Email" class="btn btn-danger">
+                    Delete
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmation-promote-user-@Model.FullName" tabindex="-1" role="dialog" aria-labelledby="confirmation-modal-user-label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="promoteUser">Promote User</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to promote <span style="font-weight: bold">@(Model.FullName)</span> to admin?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a asp-area="Admin"
+                   asp-controller="Users"
+                   asp-action="AddAdminRole"
+                   asp-route-email="@Model.Email" class="btn btn-success">
+                    Promote
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmation-approve-user-@Model.FullName" tabindex="-1" role="dialog" aria-labelledby="confirmation-modal-user-label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="approveUser">Approve User</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to approve <span style="font-weight: bold">@(Model.FullName)</span>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a asp-area="Admin"
+                   asp-controller="Users"
+                   asp-action="Approve"
+                   asp-route-email="@Model.Email" class="btn btn-success">
+                    Approve
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmation-ban-user-@Model.FullName" tabindex="-1" role="dialog" aria-labelledby="confirmation-modal-user-label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="banUser">Ban User</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to ban <span style="font-weight: bold">@(Model.FullName)</span>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a asp-area="Admin"
+                   asp-controller="Users"
+                   asp-action="Ban"
+                   asp-route-email="@Model.Email" class="btn btn-danger">
+                    Ban
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

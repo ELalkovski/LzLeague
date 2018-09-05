@@ -6,6 +6,7 @@
     using LzLeague.Common.AuthBindingModels;
     using Microsoft.AspNetCore.Authorization;
     using LzLeague.Models;
+    using LzLeague.Services.Admin.Contracts;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
@@ -15,11 +16,15 @@
     [AllowAnonymous]
     public class LoginModel : PageModel
     {
+        private readonly IUsersService us;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(IUsersService us, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger)
         {
+            this.us = us;
+            this._userManager = userManager;
             this._signInManager = signInManager;
             this._logger = logger;
         }
@@ -64,6 +69,25 @@
 
             if (this.ModelState.IsValid)
             {
+                var user = await this.us.GetUserByEmail(this.Input.Email);
+
+                if (user == null)
+                {
+                    this.ExternalLogins = (await this._signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+                    this.ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+
+                    return this.Page();
+                }
+
+                // Do not let the user to log in if he's not an admin, or approved by one.
+                if (!user.IsApproved && !await this._userManager.IsInRoleAsync(user, "Admin"))
+                {
+                    this.ExternalLogins = (await this._signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+                    this.ModelState.AddModelError(string.Empty, "Sorry, but you are not approved by an admin yet.");
+
+                    return this.Page();
+                }
+
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await this._signInManager.PasswordSignInAsync(this.Input.Email, this.Input.Password, this.Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
@@ -74,6 +98,7 @@
                 }
                 else
                 {
+                    this.ExternalLogins = (await this._signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
                     this.ModelState.AddModelError(string.Empty, "Invalid login attempt.");
 
                     return this.Page();
