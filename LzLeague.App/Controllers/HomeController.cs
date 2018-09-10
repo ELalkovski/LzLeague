@@ -40,5 +40,11 @@
         {
             return this.View();
         }
+
+        [HttpGet]
+        public IActionResult PrivacyPolicy()
+        {
+            return this.View();
+        }
     }
 }
