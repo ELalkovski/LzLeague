@@ -4,6 +4,7 @@
     using System.Security.Claims;
     using System.Threading.Tasks;
     using LzLeague.Models;
+    using LzLeague.Services.Admin.Contracts;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
@@ -13,15 +14,18 @@
     [AllowAnonymous]
     public class ExternalLoginModel : PageModel
     {
+        private readonly IUsersService us;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<ExternalLoginModel> _logger;
 
         public ExternalLoginModel(
+            IUsersService us,
             SignInManager<ApplicationUser> signInManager,
             UserManager<ApplicationUser> userManager,
             ILogger<ExternalLoginModel> logger)
         {
+            this.us = us;
             this._signInManager = signInManager;
             this._userManager = userManager;
             this._logger = logger;
@@ -66,6 +70,7 @@
                 return this.RedirectToPage("./Login", new {ReturnUrl = returnUrl });
             }
             var info = await this._signInManager.GetExternalLoginInfoAsync();
+
             if (info == null)
             {
                 this.ErrorMessage = "Error loading external login information.";
@@ -78,6 +83,23 @@
 
             if (result.Succeeded)
             {
+                var user = await this.us.GetUserByEmail(info.Principal.FindFirstValue(ClaimTypes.Email));
+
+                if (user == null)
+                {
+                    this.ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+
+                    return this.RedirectToPage("./Login", new { ReturnUrl = returnUrl });
+                }
+
+                if (!user.IsApproved)
+                {
+                    this.TempData["WarningMsg"] = "You are already registered with your facebook profile, but you are not approved by an admin.";
+                    await this._signInManager.SignOutAsync();
+
+                    return this.RedirectToPage("./Login", new { ReturnUrl = returnUrl });
+                }
+
                 this._logger.LogInformation("{Name} logged in with {LoginProvider} provider.", info.Principal.Identity.Name, info.LoginProvider);
                 return this.LocalRedirect(returnUrl);
             }
@@ -123,20 +145,40 @@
                 {
                     result = await this._userManager.AddLoginAsync(user, info);
 
-                    if (result.Succeeded)
-                    {
-                        await this._userManager.AddToRoleAsync(user, "User");
-                        await this._signInManager.SignInAsync(user, isPersistent: false);
-                        this._logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
+                    await this._userManager.AddToRoleAsync(user, "User");
+                    //await this._signInManager.SignInAsync(user, isPersistent: false);
+                    this._logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
 
-                        return this.LocalRedirect(returnUrl);
-                    }
+                    return this.RedirectToPage("./Login", new { ReturnUrl = returnUrl });
                 }
                 foreach (var error in result.Errors)
                 {
                     this.ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
+            //if (this.ModelState.IsValid)
+            //{
+            //    var user = new ApplicationUser { UserName = this.Input.Email, Email = this.Input.Email };
+            //    var result = await this._userManager.CreateAsync(user);
+
+            //    if (result.Succeeded)
+            //    {
+            //        result = await this._userManager.AddLoginAsync(user, info);
+
+            //        if (result.Succeeded)
+            //        {
+            //            await this._userManager.AddToRoleAsync(user, "User");
+            //            await this._signInManager.SignInAsync(user, isPersistent: false);
+            //            this._logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
+
+            //            return this.LocalRedirect(returnUrl);
+            //        }
+            //    }
+            //    foreach (var error in result.Errors)
+            //    {
+            //        this.ModelState.AddModelError(string.Empty, error.Description);
+            //    }
+            //}
 
             this.LoginProvider = info.LoginProvider;
             this.ReturnUrl = returnUrl;

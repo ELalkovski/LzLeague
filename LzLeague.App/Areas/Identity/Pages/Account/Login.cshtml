@@ -54,6 +54,8 @@
                 <section>
                     <h4>Use another service to log in.</h4>
                     <hr />
+                    <div id="warning-msg-login" class="alert alert-danger" style="display: none">
+                    </div>
                     <form asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
                         <div>
                             <p>
@@ -72,4 +74,11 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        let successMsg = '@TempData["SuccessMsg"]';
+        let warningMsg = '@TempData["WarningMsg"]';
+        displayMsg(successMsg, 'success-msg-login');
+        displayMsg(warningMsg, 'warning-msg-login');
+    </script>
 }
