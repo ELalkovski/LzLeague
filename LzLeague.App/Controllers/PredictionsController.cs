@@ -47,12 +47,19 @@
             this.TempData["ExistingPrediction"] = "true";
 
             model = this.mapper.Map<PredictionBindingModel>(existingPrediction);
+
             model.MatchesResults = this.mapper
                 .Map<ICollection<MatchResultPrediction>, ICollection<MatchResultBindingModel>>(existingPrediction
-                    .MatchResultsPredictions);
+                    .MatchResultsPredictions)
+                    .OrderBy(x => x.Match.Group.Name)
+                    .ThenBy(x => x.Match.Date)
+                    .ToList();
+
             model.GroupWinners = this.mapper
                 .Map<ICollection<GroupWinnerPrediction>, ICollection<GroupWinnerBindingModel>>(existingPrediction
-                    .GroupsWinners);
+                    .GroupsWinners)
+                    .OrderBy(x => x.Group.Name)
+                    .ToList();
 
             return this.View(model);
         }
@@ -118,12 +125,13 @@
         {
             var matchesVm = this.mapper
                 .Map<IEnumerable<Match>, IEnumerable<MatchResultBindingModel>>(this.ms.GetAllMatches())
-                .OrderBy(m => m.Match.Date)
-                .ThenBy(m => m.Match.BeginTime)
+                .OrderBy(m => m.Match.Group.Name)
+                .ThenBy(m => m.Match.Date)
                 .ToList();
 
             var groupsVm = this.mapper
                 .Map<IEnumerable<Group>, IEnumerable<GroupWinnerBindingModel>>(this.ts.GetAllGroups())
+                .OrderBy(x => x.Group.Name)
                 .ToList();
 
             var model = new PredictionBindingModel

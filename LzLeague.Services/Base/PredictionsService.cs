@@ -162,7 +162,7 @@
                 PredictionId = predictionId,
                 MatchId = model.MatchId,
                 Result = model.PredictionResult,
-                WinnerSign = model.PredictionSign
+                WinnerSign = model.PredictionSign.ToLower()
             };
 
             this.db.MatchesResultsPredictions.Add(matchResult);

@@ -59,6 +59,11 @@
         let previousSelectedOption;
         let isPredictionExisting = '@TempData["ExistingPrediction"]';
 
+        $('input').keyup(function () {
+            let val = $(this).val().replace(' ', '');
+            $(this).val(val);
+        });
+
         $(document).ready(function () {
 
             if (isPredictionExisting === 'true') {

@@ -204,3 +204,11 @@ a {
     line-height: 30px;
     font-weight: 800;
 }
+
+textarea {
+    white-space: pre-wrap;
+}
+
+blockquote > p {
+    white-space: pre-wrap;
+}

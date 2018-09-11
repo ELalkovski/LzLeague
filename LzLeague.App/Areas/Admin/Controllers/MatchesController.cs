@@ -41,7 +41,8 @@
             {
                 Date = key,
                 Matches = value.ToList()
-            });
+            })
+            .OrderBy(x => x.Date);
 
             return this.View(matchesGroupedByDate);
         }

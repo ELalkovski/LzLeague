@@ -60,12 +60,15 @@
                 .Predictions
                 .FirstOrDefaultAsync(p => p.OwnerId == user.Id);
 
-            // Remove all prediction's children.
-            await this.DeleteUserMatchesResultsPredictions(prediction);
-            await this.DeleteUserGroupWinnersPredictions(prediction);
+            if (prediction != null)
+            {
+                // Remove all prediction's children.
+                await this.DeleteUserMatchesResultsPredictions(prediction);
+                await this.DeleteUserGroupWinnersPredictions(prediction);
 
-            this.db.Predictions.Remove(prediction);
-            await this.db.SaveChangesAsync();
+                this.db.Predictions.Remove(prediction);
+                await this.db.SaveChangesAsync();
+            }            
         }
 
         private async Task DeleteUserMatchesResultsPredictions(Prediction prediction)

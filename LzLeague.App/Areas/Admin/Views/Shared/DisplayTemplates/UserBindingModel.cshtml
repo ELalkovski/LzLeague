@@ -19,32 +19,32 @@
             <a href="#" class="btn btn-default disabled">No Prediction</a>
         }
 
-        <a class="btn btn-danger" style="color: white" data-toggle="modal" data-target="#confirmation-modal-user-@Model.FullName">
+        <a class="btn btn-danger" style="color: white" data-toggle="modal" data-target="#confirmation-modal-user-@Model.Id">
             Delete
         </a>
         @if (Model.PredictionId == null)
         {
-            <a class="btn btn-info" style="color: white" data-toggle="modal" data-target="#confirmation-promote-user-@Model.FullName">
+            <a class="btn btn-info" style="color: white" data-toggle="modal" data-target="#confirmation-promote-user-@Model.Id">
                 Promote Admin
             </a>
         }
 
         @if (!Model.IsApproved)
         {
-            <a class="btn btn-success" style="color: white" data-toggle="modal" data-target="#confirmation-approve-user-@Model.FullName">
+            <a class="btn btn-success" style="color: white" data-toggle="modal" data-target="#confirmation-approve-user-@Model.Id">
                 Approve
             </a>
         }
         else
         {
-            <a class="btn btn-danger" style="color: white" data-toggle="modal" data-target="#confirmation-ban-user-@Model.FullName">
+            <a class="btn btn-danger" style="color: white" data-toggle="modal" data-target="#confirmation-ban-user-@Model.Id">
                 Ban
             </a>
         }
     </td>
 </tr>
 
-<div class="modal fade" id="confirmation-modal-user-@Model.FullName" tabindex="-1" role="dialog" aria-labelledby="confirmation-modal-user-label" aria-hidden="true">
+<div class="modal fade" id="confirmation-modal-user-@Model.Id" tabindex="-1" role="dialog" aria-labelledby="confirmation-modal-user-label" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -69,7 +69,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="confirmation-promote-user-@Model.FullName" tabindex="-1" role="dialog" aria-labelledby="confirmation-modal-user-label" aria-hidden="true">
+<div class="modal fade" id="confirmation-promote-user-@Model.Id" tabindex="-1" role="dialog" aria-labelledby="confirmation-modal-user-label" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -94,7 +94,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="confirmation-approve-user-@Model.FullName" tabindex="-1" role="dialog" aria-labelledby="confirmation-modal-user-label" aria-hidden="true">
+<div class="modal fade" id="confirmation-approve-user-@Model.Id" tabindex="-1" role="dialog" aria-labelledby="confirmation-modal-user-label" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -119,7 +119,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="confirmation-ban-user-@Model.FullName" tabindex="-1" role="dialog" aria-labelledby="confirmation-modal-user-label" aria-hidden="true">
+<div class="modal fade" id="confirmation-ban-user-@Model.Id" tabindex="-1" role="dialog" aria-labelledby="confirmation-modal-user-label" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
