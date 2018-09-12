@@ -59,6 +59,7 @@
                 .ThenInclude(mrp => mrp.Match)
                 .Include(p => p.GroupsWinners)
                 .ThenInclude(gwp => gwp.Group)
+                .ThenInclude(gwp => gwp.Teams)
                 .FirstOrDefaultAsync(p => p.OwnerId == userId);
 
             return prediction;
@@ -112,14 +113,17 @@
                 if (winnerPrediction.FirstPlace == winner.Name)
                 {
                     user.TotalScore += GuessedWinnerPoints;
+                    user.Prediction.GuessedGroupWinners++;
                 }
                 if (winnerPrediction.SecondPlace == secondPlace.Name)
                 {
                     user.TotalScore += GuessedSecondPlacePoints;
+                    user.Prediction.GuessedSecondPlaces++;
                 }
                 if (winnerPrediction.EuropaLeague == thirdPlace.Name)
                 {
                     user.TotalScore += GuessedElQualifierPoints;
+                    user.Prediction.GuessedElTeams++;
                 }
 
                 this.db.Users.Update(user);

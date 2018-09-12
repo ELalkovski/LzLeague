@@ -32,7 +32,7 @@
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
 
-        <link rel="stylesheet" href="~/css/site.css" />
+
         <link href="~/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
         <!-- Page level plugin CSS-->
@@ -41,10 +41,13 @@
         <!-- Custom styles for this template-->
         <link href="~/css/sb-admin.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
+        <link rel="stylesheet" href="~/css/site.css" />
     </environment>
 </head>
 <body id="page-top">
-
+    <div id="work-in-progress">
+        <div class="work-spinner"></div>
+    </div>
     <nav class="navbar navbar-expand navbar-dark static-top @(isAdmin ? "admin-nav-colors" : "bg-dark")">
         <a class="navbar-brand mr-1" asp-area="" asp-controller="Home" asp-action="Index">Lz League</a>
         <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
@@ -169,18 +172,18 @@
         <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
         @*<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
-                asp-fallback-src="~/vendor/jquery/dist/jquery.min.js"
-                asp-fallback-test="window.jQuery"
-                crossorigin="anonymous"
-                integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
-        </script>
-        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
-                asp-fallback-src="~/vendor/bootstrap/dist/js/bootstrap.min.js"
-                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
-                crossorigin="anonymous"
-                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
-        </script>
-        <script src="~/js/site.min.js" asp-append-version="true"></script>*@
+                    asp-fallback-src="~/vendor/jquery/dist/jquery.min.js"
+                    asp-fallback-test="window.jQuery"
+                    crossorigin="anonymous"
+                    integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
+            </script>
+            <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
+                    asp-fallback-src="~/vendor/bootstrap/dist/js/bootstrap.min.js"
+                    asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                    crossorigin="anonymous"
+                    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
+            </script>
+            <script src="~/js/site.min.js" asp-append-version="true"></script>*@
     </environment>
 
     <!-- Core plugin JavaScript-->
@@ -198,6 +201,15 @@
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
     <script>
+        //$(document).ready(function () {
+        //    $('#loading-bar').fadeOut(1000, function () {
+        //    });
+        //});
+
+        $(window).bind("load", function () {
+            $('#work-in-progress').fadeOut(100);
+        });
+
         window.addEventListener("load", function () {
             window.cookieconsent.initialise({
                 "palette": {

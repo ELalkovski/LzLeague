@@ -1,7 +1,7 @@
 ﻿@model LzLeague.Common.AdminBindingModels.MatchBindingModel
 
 <tr>
-    <td>@Model.BeginTime.Value.Hours:@Model.BeginTime.Value.Minutes</td>
+    <td>@Model.BeginTime.Value.Hours:@Model.BeginTime.Value.Minutes.ToString("00")</td>
     <td class="d-flex justify-content-md-end">@Model.HomeTeam</td>
     <td style="font-weight: bold">@(Model.Result ?? "?-?")</td>
     <td> @Model.AwayTeam</td>

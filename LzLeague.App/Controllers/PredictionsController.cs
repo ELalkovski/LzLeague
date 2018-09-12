@@ -1,5 +1,6 @@
 ﻿namespace LzLeague.App.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -40,7 +41,7 @@
 
             if (existingPrediction == null)
             {
-                model = this.GetPrePopulatedModel();
+                model = await this.GetPrePopulatedModel();
                 return this.View(model);
             }
 
@@ -54,6 +55,8 @@
                     .OrderBy(x => x.Match.Group.Name)
                     .ThenBy(x => x.Match.Date)
                     .ToList();
+
+            await this.PopulateTeamsLogos(model.MatchesResults.ToList());
 
             model.GroupWinners = this.mapper
                 .Map<ICollection<GroupWinnerPrediction>, ICollection<GroupWinnerBindingModel>>(existingPrediction
@@ -70,6 +73,7 @@
         {
             if (!this.ModelState.IsValid)
             {
+                await this.PopulateTeamsLogos(model.MatchesResults.ToList());
                 return this.View(model);
             }
 
@@ -99,6 +103,9 @@
             predictionVm.MatchesResults = this.mapper
                 .Map<ICollection<MatchResultPrediction>, ICollection<MatchResultBindingModel>>(prediction
                     .MatchResultsPredictions);
+
+            await this.PopulateTeamsLogos(predictionVm.MatchesResults.ToList());
+
             predictionVm.GroupWinners = this.mapper
                 .Map<ICollection<GroupWinnerPrediction>, ICollection<GroupWinnerBindingModel>>(prediction
                     .GroupsWinners);
@@ -121,7 +128,7 @@
             return this.View(predictionsVm);
         }
 
-        private PredictionBindingModel GetPrePopulatedModel()
+        private async Task<PredictionBindingModel> GetPrePopulatedModel()
         {
             var matchesVm = this.mapper
                 .Map<IEnumerable<Match>, IEnumerable<MatchResultBindingModel>>(this.ms.GetAllMatches())
@@ -129,6 +136,8 @@
                 .ThenBy(m => m.Match.Date)
                 .ToList();
 
+            await this.PopulateTeamsLogos(matchesVm);
+            
             var groupsVm = this.mapper
                 .Map<IEnumerable<Group>, IEnumerable<GroupWinnerBindingModel>>(this.ts.GetAllGroups())
                 .OrderBy(x => x.Group.Name)
@@ -141,6 +150,15 @@
             };
 
             return model;
+        }
+
+        private async Task PopulateTeamsLogos(List<MatchResultBindingModel> matchesVm)
+        {
+            foreach (var match in matchesVm)
+            {
+                match.HomeTeamLogo = await this.ts.GetTeamLogo(match.Match.HomeTeam);
+                match.AwayTeamLogo = await this.ts.GetTeamLogo(match.Match.AwayTeam);
+            }
         }
     }
 }

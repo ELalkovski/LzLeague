@@ -1,17 +1,24 @@
 ﻿@model LzLeague.Common.PredictionsBindingModels.GroupWinnerBindingModel
 
+@*@{ 
+    var firstPlaceTeam = (Model.Group.Teams == null) ? null : Model.Group.Teams.FirstOrDefault(t => t.Position == 1);
+    var secondPlaceTeam = (Model.Group.Teams == null) ? null : Model.Group.Teams.FirstOrDefault(t => t.Position == 2);
+    var thirdPlaceTeam = (Model.Group.Teams == null) ? null : Model.Group.Teams.FirstOrDefault(t => t.Position == 3);
+    var groupWinnersGuess = (Model.Prediction == null) ? null : Model.Prediction.GroupsWinners.FirstOrDefault(gw => gw.GroupId == Model.GroupId);
+}*@
+
 <div class="form-group">
     @Html.HiddenFor(x => x.PredictionId)
     @Html.HiddenFor(x => x.Group.Name)
     @Html.HiddenFor(x => x.GroupId)
-    <input asp-for="GroupId" name="GroupId" value="@Model.GroupId" hidden="hidden"/>
+    <input asp-for="GroupId" name="GroupId" value="@Model.GroupId" hidden="hidden" />
     <label class="col-md-1 col-lg-2 form-check-inline">
         <span>
-            <b>Group</b> 
+            <b>Group</b>
             <span class="form-match-result" style="color: @(Model.Group.Name == "A" ? "red" :
-                       (Model.Group.Name == "B" ? "blue" : 
-                       (Model.Group.Name == "C" ? "green" : 
-                       (Model.Group.Name == "D" ? "brown" : 
+                       (Model.Group.Name == "B" ? "blue" :
+                       (Model.Group.Name == "C" ? "green" :
+                       (Model.Group.Name == "D" ? "brown" :
                        (Model.Group.Name == "E" ? "orange" :
                        (Model.Group.Name == "F" ? "#C3DE3E" :
                        (Model.Group.Name == "G" ? "purple" : "#FF9999")))))))">
@@ -20,6 +27,20 @@
         </span>
     </label>
     <div class="col-md-3 form-check-inline">
+        @*@if (Model.Group.MatchesPlayed == 12 
+            && firstPlaceTeam != null 
+            && groupWinnersGuess != null
+            && firstPlaceTeam.Name == groupWinnersGuess.FirstPlace)
+        {
+            <i class="fas fa-check" style="margin-right: 6px"></i>
+        }
+        else if (Model.Group.MatchesPlayed == 12 
+            && firstPlaceTeam != null
+            && groupWinnersGuess != null
+            && firstPlaceTeam.Name != groupWinnersGuess.FirstPlace)
+        {
+            <i class="fas fa-times" style="margin-right: 6px"></i>
+        }*@
         <select class="form-control form-control-sm" custom-name="first-place-teams"
                 asp-for="FirstPlace">
             @if (Model.FirstPlace != null)
@@ -28,11 +49,25 @@
             }
             else
             {
-                <option>Group Winner</option>
+                <option style="display: none">Group Winner</option>
             }
         </select>
     </div>
     <div class="col-md-3 form-check-inline">
+        @*@if (Model.Group.MatchesPlayed == 12
+           && secondPlaceTeam != null
+           && groupWinnersGuess != null
+           && secondPlaceTeam.Name == groupWinnersGuess.SecondPlace)
+        {
+            <i class="fas fa-check" style="margin-right: 6px"></i>
+        }
+        else if (Model.Group.MatchesPlayed == 12
+            && secondPlaceTeam != null
+            && groupWinnersGuess != null
+            && secondPlaceTeam.Name != groupWinnersGuess.SecondPlace)
+        {
+            <i class="fas fa-times" style="margin-right: 6px"></i>
+        }*@
         <select class="form-control form-control-sm" custom-name="second-place-teams"
                 asp-for="SecondPlace">
             @if (Model.SecondPlace != null)
@@ -41,11 +76,25 @@
             }
             else
             {
-                <option>Second Place</option>
+                <option style="display: none">Second Place</option>
             }
         </select>
     </div>
     <div class="col-md-3 form-check-inline">
+        @*@if (Model.Group.MatchesPlayed == 12 
+            && thirdPlaceTeam != null
+            && groupWinnersGuess != null
+            && thirdPlaceTeam.Name == groupWinnersGuess.EuropaLeague)
+        {
+            <i class="fas fa-check" style="margin-right: 6px"></i>
+        }
+        else if (Model.Group.MatchesPlayed == 12
+            && thirdPlaceTeam != null
+            && groupWinnersGuess != null
+            && thirdPlaceTeam.Name != groupWinnersGuess.EuropaLeague)
+        {
+            <i class="fas fa-times" style="margin-right: 6px"></i>
+        }*@
         <select class="form-control form-control-sm" custom-name="europa-league-teams"
                 asp-for="EuropaLeague">
             @if (Model.EuropaLeague != null)
@@ -54,9 +103,18 @@
             }
             else
             {
-                <option>Europa League Qualifier</option>
+                <option style="display: none">Europa League Qualifier</option>
             }
         </select>
+    </div>
+    <div class="row">
+        <span asp-validation-for="FirstPlace" class="text-danger"></span>
+    </div>
+    <div class="row">
+        <span asp-validation-for="SecondPlace" class="text-danger"></span>
+    </div>
+    <div class="row">
+        <span asp-validation-for="EuropaLeague" class="text-danger"></span>
     </div>
 </div>
 <hr />

@@ -10,16 +10,16 @@
     @Html.HiddenFor(x => x.Match.Group.Name)
     @Html.HiddenFor(x => x.Match.GroupId)
 
-    <label class="form-check-inline">
-        @Model.Match.Date.Value.ToShortDateString() / @Model.Match.BeginTime.Value.Hours:@Model.Match.BeginTime.Value.Minutes
+    <label class="form-check-inline" style="font-style:italic; font-weight: normal">
+        @Model.Match.Date.Value.ToShortDateString() @*/ @Model.Match.BeginTime.Value.Hours:@Model.Match.BeginTime.Value.Minutes.ToString("00")*@
     </label>
     <label class="col-md-2 col-lg-2 form-check-inline">
         <span>
-            <b>Group</b> 
+            <b>Group</b>
             <span class="form-match-result" style="color: @(Model.Match.Group.Name == "A" ? "red" :
-                       (Model.Match.Group.Name == "B" ? "blue" : 
-                       (Model.Match.Group.Name == "C" ? "green" : 
-                       (Model.Match.Group.Name == "D" ? "grey" : 
+                       (Model.Match.Group.Name == "B" ? "blue" :
+                       (Model.Match.Group.Name == "C" ? "green" :
+                       (Model.Match.Group.Name == "D" ? "grey" :
                        (Model.Match.Group.Name == "E" ? "orange" :
                        (Model.Match.Group.Name == "F" ? "brown" :
                        (Model.Match.Group.Name == "G" ? "purple" : "black")))))))">
@@ -27,8 +27,12 @@
             </span>
         </span>
     </label>
-    <label class="col-md-4 col-lg-4 offset-md-1 offset-lg-0 form-check-inline">
-        <span style="font-size: 1.1em"><em>@Model.Match.HomeTeam </em> - <em>@Model.Match.AwayTeam</em></span>
+    <label class="col-md-4 col-lg-5 offset-md-1 offset-lg-0 form-check-inline">
+        <span style="font-size: 1.1em">
+            <img src="@Model.HomeTeamLogo" class="my-img" />
+            <em>@Model.Match.HomeTeam </em> - <em>@Model.Match.AwayTeam</em>
+            <img src="@Model.AwayTeamLogo" class="my-img" />
+        </span>
     </label>
     <div class="form-check-inline float-md-right">
         @if (Model.Match.Result != null && Model.Match.Result == Model.PredictionResult)
@@ -40,7 +44,13 @@
             <i class="fas fa-times" style="margin-right: 6px"></i>
         }
         <input asp-for="PredictionResult" type="text" placeholder="Score" style="width: 5em" class="form-control" />
-        <input asp-for="PredictionSign" type="text" placeholder="Result" class="form-control" style="width: 5em" />
+        <select class="form-control" custom-name="second-place-teams" asp-for="PredictionSign" style="width: 6em">
+            <option style="display: none">Result</option>
+            <option value="1">1</option>
+            <option value="x">X</option>
+            <option value="2">2</option>
+        </select>
+        @*<input asp-for="PredictionSign" type="text" placeholder="Result" class="form-control" style="width: 5em" />*@
         @if (Model.Match.WinnerSign != null && Model.Match.WinnerSign == Model.PredictionSign)
         {
             <i class="fas fa-check"></i>
@@ -50,5 +60,15 @@
             <i class="fas fa-times" style="margin-right: 5px"></i>
         }
     </div>
+    <div class="row">
+        <span asp-validation-for="PredictionResult" class="text-danger"></span>
+    </div>
+    <div class="row">
+        <span asp-validation-for="PredictionSign" class="text-danger"></span>
+    </div>
+    @if (Model.Match.Result != null)
+    {
+        <div class="col-md-4 offset-lg-5" style="font-weight: bold; color: #00BFFF">@Model.Match.Result.Replace(":", "-")</div>
+    }
 </div>
 <hr />

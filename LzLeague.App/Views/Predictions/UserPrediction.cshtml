@@ -9,8 +9,6 @@
         <div class="col-md-10 offset-md-1">
             <h4>@ViewData["Title"]</h4>
             <hr />
-            <div asp-validation-summary="All" class="text-danger">
-            </div>
             <div class="alert alert-warning">
                 <strong>Warning!</strong> Once you've submitted the form, you will not be able to make corrections on it. If you made a mistake, please contact admin.
             </div>
@@ -73,6 +71,12 @@
                 $('#match-results')
                     .find('input')
                     .each(function(index, element) {
+                        $(element).prop('disabled', 'disabled');
+                    });
+
+                $('#match-results')
+                    .find('select')
+                    .each(function (index, element) {
                         $(element).prop('disabled', 'disabled');
                     });
 

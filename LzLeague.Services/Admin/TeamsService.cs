@@ -68,6 +68,15 @@
             return group;
         }
 
+        public async Task<string> GetTeamLogo(string teamName)
+        {
+            var team = await this.db
+                .Teams
+                .FirstOrDefaultAsync(t => t.Name == teamName);
+
+            return team.ImageUrl;
+        }
+
         public async Task CreateTeam(Team team)
         {
             this.db.Teams.Add(team);

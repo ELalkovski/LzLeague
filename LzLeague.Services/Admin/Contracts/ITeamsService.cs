@@ -17,6 +17,8 @@
 
         Task<Group> GetGroupByName(string name);
 
+        Task<string> GetTeamLogo(string teamName);
+
         Task CreateTeam(Team team);
 
         Task UpdateGroupMatchesCount(Group group);
