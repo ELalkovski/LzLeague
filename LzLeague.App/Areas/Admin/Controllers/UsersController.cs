@@ -19,13 +19,15 @@
         private readonly IUsersService us;
         private readonly IMapper mapper;
         private readonly IPredictionsService ps;
+        private readonly ITeamsService ts;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public UsersController(IUsersService us, IMapper mapper, IPredictionsService ps, UserManager<ApplicationUser> userManager)
+        public UsersController(IUsersService us, IMapper mapper, IPredictionsService ps, ITeamsService ts, UserManager<ApplicationUser> userManager)
         {
             this.us = us;
             this.mapper = mapper;
             this.ps = ps;
+            this.ts = ts;
             this.userManager = userManager;
         }
 
@@ -136,11 +138,14 @@
             }
 
             var predictionVm = this.mapper
-                .Map<Prediction, PredictionBindingModel>(prediction);
+                .Map<Prediction, PredictionBindingModel>(prediction);            
 
             predictionVm.MatchesResults = this.mapper
                 .Map<ICollection<MatchResultPrediction>, ICollection<MatchResultBindingModel>>(prediction
                     .MatchResultsPredictions);
+
+            await this.PopulateTeamsLogos(predictionVm.MatchesResults.ToList());
+
             predictionVm.GroupWinners = this.mapper
                 .Map<ICollection<GroupWinnerPrediction>, ICollection<GroupWinnerBindingModel>>(prediction
                     .GroupsWinners);
@@ -167,6 +172,15 @@
             this.TempData["SuccessMsg"] = "Prediction was updated successfully.";
 
             return this.RedirectToAction("EditPrediction", new {predictionId = model.Id});
+        }
+
+        private async Task PopulateTeamsLogos(List<MatchResultBindingModel> matchesVm)
+        {
+            foreach (var match in matchesVm)
+            {
+                match.HomeTeamLogo = await this.ts.GetTeamLogo(match.Match.HomeTeam);
+                match.AwayTeamLogo = await this.ts.GetTeamLogo(match.Match.AwayTeam);
+            }
         }
     }
 }

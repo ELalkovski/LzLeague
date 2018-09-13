@@ -19,6 +19,7 @@ namespace LzLeague.App
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+                .UseStartup<Startup>()
+            .UseUrls("http://http://badtrip-001-site1.dtempurl.com:80");
     }
 }
