@@ -36,6 +36,7 @@
                 .Matches
                 .Include(m => m.MatchResultPredictions)
                 .ThenInclude(mrp => mrp.Prediction)
+                .Include(m => m.Group)
                 .FirstOrDefaultAsync(m => m.Id == matchId);
         }
 

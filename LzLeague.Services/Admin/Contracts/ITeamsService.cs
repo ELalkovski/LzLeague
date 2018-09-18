@@ -30,5 +30,7 @@
         Task<Team> GetTeamById(int teamId);
 
         Task Delete(Team team);
+
+        Task EditTeamsStatistics(Match match, string score, string result);
     }
 }

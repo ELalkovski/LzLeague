@@ -85,6 +85,39 @@
             }
         }
 
+        public async Task EditUsersScores(Match match)
+        {
+            var group = match.Group;
+
+            foreach (var resultPrediction in match.MatchResultPredictions)
+            {
+                var user = await this.db
+                    .Users
+                    .FirstOrDefaultAsync(u => u.Id == resultPrediction.Prediction.OwnerId);
+
+                if (resultPrediction.Result.Trim() != match.Result)
+                {
+                    resultPrediction.Prediction.GuessedScores--;
+                    user.TotalScore -= GuessedScorePoints;
+                }
+                if (resultPrediction.WinnerSign.Trim() != match.WinnerSign.Trim())
+                {
+                    resultPrediction.Prediction.GuessedResults--;
+                    user.TotalScore -= GuessedResultPoints;
+                }
+
+                this.db.Users.Update(user);
+                this.db.Predictions.Update(resultPrediction.Prediction);
+            }
+
+            await this.db.SaveChangesAsync();
+
+            if (group.MatchesPlayed == 12)
+            {
+                await this.EditRankingResults(group);
+            }
+        }
+
         public async Task<Prediction> GetPrediction(int predictionId)
         {
             var prediction = await this.db
@@ -96,6 +129,40 @@
                 .FirstOrDefaultAsync(p => p.Id == predictionId);
 
             return prediction;
+        }
+
+        private async Task EditRankingResults(Group group)
+        {
+            var winner = group.Teams.FirstOrDefault(t => t.Position == 1);
+            var secondPlace = group.Teams.FirstOrDefault(t => t.Position == 2);
+            var thirdPlace = group.Teams.FirstOrDefault(t => t.Position == 3);
+
+            foreach (var winnerPrediction in group.GroupWinnerPredictions)
+            {
+                var user = await this.db
+                    .Users
+                    .FirstOrDefaultAsync(u => u.Id == winnerPrediction.Prediction.OwnerId);
+
+                if (winnerPrediction.FirstPlace != winner.Name)
+                {
+                    user.TotalScore -= GuessedWinnerPoints;
+                    user.Prediction.GuessedGroupWinners--;
+                }
+                if (winnerPrediction.SecondPlace != secondPlace.Name)
+                {
+                    user.TotalScore -= GuessedSecondPlacePoints;
+                    user.Prediction.GuessedSecondPlaces--;
+                }
+                if (winnerPrediction.EuropaLeague != thirdPlace.Name)
+                {
+                    user.TotalScore -= GuessedElQualifierPoints;
+                    user.Prediction.GuessedElTeams--;
+                }
+
+                this.db.Users.Update(user);
+            }
+
+            await this.db.SaveChangesAsync();
         }
 
         private async Task UpdateRankingResults(Group group)

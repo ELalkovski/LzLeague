@@ -134,7 +134,98 @@
             await this.db.SaveChangesAsync();
             await this.UpdateTeamsPositions(group);
         }
-        
+
+        public async Task EditTeamsStatistics(Match match, string score, string result)
+        {
+            var homeTeam = await this.GetTeamByName(match.HomeTeam);
+            var awayTeam = await this.GetTeamByName(match.AwayTeam);
+            var newGoalsArgs = score
+                .Split(':')
+                .Select(int.Parse)
+                .ToList();
+
+            var prevGoalsArgs = match.Result
+                .Split(':')
+                .Select(int.Parse)
+                .ToList();
+
+            var homeGoalsDifference = prevGoalsArgs[0] - newGoalsArgs[0];
+            var awayGoalsDifference = prevGoalsArgs[1] - newGoalsArgs[1];
+
+            homeTeam.GoalsScored -= homeGoalsDifference;
+            awayTeam.GoalsScored -= awayGoalsDifference;
+            homeTeam.GoalsReceived -= awayGoalsDifference;
+            awayTeam.GoalsReceived -= homeGoalsDifference;
+
+            if (match.WinnerSign != result)
+            {
+                if (match.WinnerSign == "1" && result == "x")
+                {
+                    homeTeam.Wins--;
+                    homeTeam.Draws++;
+                    homeTeam.Points -= WinPoints;
+                    homeTeam.Points += DrawPoints;
+                    awayTeam.Loses--;
+                    awayTeam.Draws++;
+                    awayTeam.Points += DrawPoints;
+                }
+                else if (match.WinnerSign == "2" && result == "x")
+                {
+                    awayTeam.Wins--;
+                    awayTeam.Draws++;
+                    awayTeam.Points -= WinPoints;
+                    awayTeam.Points += DrawPoints;
+                    homeTeam.Loses--;
+                    homeTeam.Draws++;
+                    homeTeam.Points += DrawPoints;
+                }
+                else if (match.WinnerSign == "1" && result == "2")
+                {
+                    homeTeam.Wins--;
+                    homeTeam.Loses++;
+                    homeTeam.Points -= WinPoints;
+                    awayTeam.Wins++;
+                    awayTeam.Loses--;
+                    awayTeam.Points += WinPoints;
+                }
+                else if (match.WinnerSign == "2" && result == "1")
+                {
+                    awayTeam.Wins--;
+                    awayTeam.Loses++;
+                    awayTeam.Points -= WinPoints;
+                    homeTeam.Wins++;
+                    homeTeam.Loses--;
+                    homeTeam.Points += WinPoints;
+                }
+                else if (match.WinnerSign == "x" && result == "1")
+                {
+                    homeTeam.Draws--;
+                    homeTeam.Wins++;
+                    homeTeam.Points -= DrawPoints;
+                    homeTeam.Points += WinPoints;
+                    awayTeam.Draws--;
+                    awayTeam.Loses++;
+                    awayTeam.Points -= DrawPoints;
+                }
+                else if (match.WinnerSign == "x" && result == "2")
+                {
+                    awayTeam.Draws--;
+                    awayTeam.Wins++;
+                    awayTeam.Points -= DrawPoints;
+                    awayTeam.Points += WinPoints;
+                    homeTeam.Draws--;
+                    homeTeam.Loses++;
+                    homeTeam.Points -= DrawPoints;
+                }
+            }
+
+            this.db.Teams.Update(homeTeam);
+            this.db.Teams.Update(awayTeam);
+            await this.db.SaveChangesAsync();
+            await this.UpdateTeamsPositions(match.Group);
+        }
+
+
         public async Task<Team> GetTeamByName(string name)
         {
             return await this.db

@@ -17,5 +17,7 @@
         Task UpdateUsersScores(Group group, Match match, AddResultBindingModel resultModel);
 
         Task<Prediction> GetPrediction(int predictionId);
+
+        Task EditUsersScores(Match match);
     }
 }

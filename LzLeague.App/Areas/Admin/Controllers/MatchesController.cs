@@ -100,7 +100,33 @@
             this.TempData["SuccessMsg"] = "Match has been deleted successfully.";
             return this.RedirectToAction("Index");
         }
-             
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Edit(int matchId, string result, string score)
+        {
+            var match = await this.ms.GetMatch(matchId);
+
+            if (match == null)
+            {
+                this.TempData["WarningMsg"] = "Match you are trying to reach doesn't exist.";
+                return this.RedirectToAction("Index");
+            }
+
+            var model = new AddResultBindingModel
+            {
+                MatchId = matchId,
+                Result = score,
+                WinnerSign = result
+            };
+            
+            await this.ts.EditTeamsStatistics(match, score, result);
+            await this.ms.UpdateMatchResults(model);
+            await this.ps.EditUsersScores(match);
+
+            return this.RedirectToAction("Index");
+        }
+
         [HttpGet]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddResult()
@@ -139,7 +165,7 @@
             await this.ts.UpdateGroupMatchesCount(group);
             await this.ms.UpdateMatchResults(model);
             await this.ts.UpdateTeamsStatistics(match.HomeTeam, match.AwayTeam, model.Result, model.WinnerSign, group);
-            await this.ps.UpdateUsersScores(group, match, model);
+            await this.ps.UpdateUsersScores(group, match, model); // 3
 
             this.TempData["SuccessMsg"] = "Match result has been added successfully and users scores are updated.";
 
