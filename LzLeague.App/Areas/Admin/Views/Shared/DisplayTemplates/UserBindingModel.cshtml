@@ -5,7 +5,7 @@
     <td style="color: green; font-weight: bold">@Model.FullName</td>
     <td>@Model.Email</td>
     <td>
-        @if (Model.PredictionId != null)
+        @if (Model.PredictionId != null && Model.TotalScore == 0)
         {
             <a asp-area="Admin"
                asp-controller="Users"
