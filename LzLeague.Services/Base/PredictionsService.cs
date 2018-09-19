@@ -85,7 +85,7 @@
             }
         }
 
-        public async Task EditUsersScores(Match match)
+        public async Task EditUsersScores(Match match, string score, string result)
         {
             var group = match.Group;
 
@@ -95,15 +95,29 @@
                     .Users
                     .FirstOrDefaultAsync(u => u.Id == resultPrediction.Prediction.OwnerId);
 
-                if (resultPrediction.Result.Trim() != match.Result)
+                if (resultPrediction.Result.Trim() == match.Result &&
+                    resultPrediction.Result.Trim() != score)
                 {
                     resultPrediction.Prediction.GuessedScores--;
                     user.TotalScore -= GuessedScorePoints;
                 }
-                if (resultPrediction.WinnerSign.Trim() != match.WinnerSign.Trim())
+                else if (resultPrediction.Result.Trim() != match.Result &&
+                    resultPrediction.Result.Trim() == score)
+                {
+                    resultPrediction.Prediction.GuessedScores++;
+                    user.TotalScore += GuessedScorePoints;
+                }
+                if (resultPrediction.WinnerSign.Trim() == match.WinnerSign.Trim() &&
+                    resultPrediction.WinnerSign.Trim() != result)
                 {
                     resultPrediction.Prediction.GuessedResults--;
                     user.TotalScore -= GuessedResultPoints;
+                }
+                else if (resultPrediction.WinnerSign.Trim() != match.WinnerSign.Trim() &&
+                         resultPrediction.WinnerSign.Trim() == result)
+                {
+                    resultPrediction.Prediction.GuessedResults++;
+                    user.TotalScore += GuessedResultPoints;
                 }
 
                 this.db.Users.Update(user);

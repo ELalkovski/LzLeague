@@ -18,6 +18,6 @@
 
         Task<Prediction> GetPrediction(int predictionId);
 
-        Task EditUsersScores(Match match);
+        Task EditUsersScores(Match match, string score, string result);
     }
 }

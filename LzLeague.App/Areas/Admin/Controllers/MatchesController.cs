@@ -121,8 +121,8 @@
             };
             
             await this.ts.EditTeamsStatistics(match, score, result);
+            await this.ps.EditUsersScores(match, score, result);
             await this.ms.UpdateMatchResults(model);
-            await this.ps.EditUsersScores(match);
 
             return this.RedirectToAction("Index");
         }
