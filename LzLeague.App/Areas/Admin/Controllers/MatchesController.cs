@@ -151,6 +151,7 @@
             }
 
             var group = await this.ts.GetGroupById(model.GroupId);
+            model.WinnerSign = model.WinnerSign.ToLower();
 
             if (group.MatchesPlayed == 12)
             {

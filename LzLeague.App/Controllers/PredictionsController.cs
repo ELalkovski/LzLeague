@@ -53,8 +53,8 @@
             model.MatchesResults = this.mapper
                 .Map<ICollection<MatchResultPrediction>, ICollection<MatchResultBindingModel>>(existingPrediction
                     .MatchResultsPredictions)
-                    .OrderBy(x => x.Match.Group.Name)
-                    .ThenBy(x => x.Match.Date)
+                    .OrderBy(x => x.Match.Date)
+                    .ThenBy(x => x.Match.Group.Name)
                     .ToList();
 
             await this.PopulateTeamsLogos(model.MatchesResults.ToList());
@@ -103,7 +103,10 @@
 
             predictionVm.MatchesResults = this.mapper
                 .Map<ICollection<MatchResultPrediction>, ICollection<MatchResultBindingModel>>(prediction
-                    .MatchResultsPredictions);
+                    .MatchResultsPredictions)
+                    .OrderBy(x => x.Match.Date)
+                    .ThenBy(x => x.Match.Group.Name)
+                    .ToList();
 
             await this.PopulateTeamsLogos(predictionVm.MatchesResults.ToList());
 
@@ -117,7 +120,7 @@
         }
 
         [HttpGet]
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin, User")]
         public IActionResult UsersStandings()
         {
             var predictions = this.ps.GetAllPredictionsForStandings();

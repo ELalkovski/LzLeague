@@ -8,39 +8,46 @@
     <div class="col-md-6 col-xs-2 offset-md-1">
         @if (User.IsInRole("Admin"))
         {
-  
+
         }
         <div class="card shadow-lg">
             <div class="card-header text-center">
-                <img src="@Model.ImageUrl" class="card-img" style="width: 13em"/>
+                <img src="@Model.ImageUrl" class="card-img" style="width: 13em" />
             </div>
             <div class="card-header">
                 <h3 class="text-center" style="color: #4C6990">Group @Model.Group.Name</h3>
-                <hr/>
+                <p class="text-center">Matches Played: @Model.Group.MatchesPlayed</p>
+                <hr />
                 <h2 class="text-center">@Model.Name</h2>
             </div>
             <div id="team-details" class="card-body">
                 <span><b>Position </b></span> <span class="float-md-right">@Model.Position</span>
-                <hr/>
+                <hr />
                 <span><b>Wins </b></span> <span class="float-md-right">@Model.Wins</span>
-                <hr/>
+                <hr />
                 <span><b>Draws </b></span> <span class="float-md-right">@Model.Draws</span>
-                <hr/>
+                <hr />
                 <span><b>Loses </b></span> <span class="float-md-right">@Model.Loses</span>
-                <hr/>
+                <hr />
                 <span><b>Goals Scored </b></span> <span class="float-md-right">@Model.GoalsScored</span>
-                <hr/>
+                <hr />
                 <span><b>Goals Received </b></span> <span class="float-md-right">@Model.GoalsReceived</span>
-                <hr/>
+                <hr />
                 <span><b>Goals Difference </b></span> <span class="float-md-right">@(Model.GoalsScored - Model.GoalsReceived)</span>
-                <hr/>
-                <span><b>Points </b></span> <span class="float-md-right">@(Model.GoalsScored - Model.GoalsReceived)</span>
+                <hr />
+                <span><b>Points </b></span> <span class="float-md-right">@Model.Points</span>
             </div>
             <div class="card-footer">
                 @if (User.IsInRole("Admin") && Model.Group.MatchesPlayed == 0)
                 {
                     <a class="btn btn-danger float-md-right" style="color:white" data-toggle="modal" data-target="#modal-delete-team">
                         Delete Team
+                    </a>
+                }
+                @if (User.IsInRole("Admin"))
+                {
+                    <a class="btn btn-info float-md-right" style="color:white" data-toggle="modal" data-target="#modal-change-team-statistics">
+                        Change Statistics
                     </a>
                 }
             </div>
@@ -71,3 +78,33 @@
     </div>
 </div>
 
+
+<div class="modal fade" id="modal-change-team-statistics" tabindex="-1" role="dialog" aria-labelledby="confirmation-modal-label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addStatistics">Change Statistics</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form asp-area="Admin" asp-controller="Teams" asp-action="ChangeStatistics" method="post">
+                <div class="modal-body">
+                    <input type="text" name="teamId" value="@Model.Id" hidden />
+                    <select name="statType" class="form-control">
+                        <option value="win">Win</option>
+                        <option value="draw">Draw</option>
+                        <option value="loss">Loss</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" 
+                            class="btn btn-info">
+                        Add Points
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

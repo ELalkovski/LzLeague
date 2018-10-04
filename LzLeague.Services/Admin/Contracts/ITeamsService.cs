@@ -32,5 +32,7 @@
         Task Delete(Team team);
 
         Task EditTeamsStatistics(Match match, string score, string result);
+
+        Task AddStatistics(Team team, string statType);
     }
 }

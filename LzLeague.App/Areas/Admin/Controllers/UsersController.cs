@@ -174,6 +174,17 @@
             return this.RedirectToAction("EditPrediction", new {predictionId = model.Id});
         }
 
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AddPoints(string pointsType, string email)
+        {
+            var user = await this.us.GetUserByEmail(email);
+
+            await this.us.AddPoints(user, pointsType);
+
+            return this.RedirectToAction("UsersStandings", "Predictions", new {area = ""});
+        }
+
         private async Task PopulateTeamsLogos(List<MatchResultBindingModel> matchesVm)
         {
             foreach (var match in matchesVm)

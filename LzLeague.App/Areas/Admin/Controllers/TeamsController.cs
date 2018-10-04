@@ -105,5 +105,22 @@
             
             return this.RedirectToAction("Index");
         }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> ChangeStatistics(int teamId, string statType)
+        {
+            var team = await this.ts.GetTeamById(teamId);
+
+            if (team == null)
+            {
+                this.TempData["WarningMsg"] = "Sorry, team you are trying to reach doesn't exist.";
+                return this.RedirectToAction("Index");
+            }
+
+            await this.ts.AddStatistics(team, statType);
+
+            return this.RedirectToAction("Details", new { teamId });
+        }
     }
 }

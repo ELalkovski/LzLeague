@@ -10,6 +10,12 @@
 
     public class UsersService : IUsersService
     {
+        private const int GuessedScorePoints = 5;
+        private const int GuessedResultPoints = 2;
+        private const int GuessedWinnerPoints = 7;
+        private const int GuessedSecondPlacePoints = 5;
+        private const int GuessedElQualifierPoints = 3;
+
         private readonly LzLeagueContext db;
 
         public UsersService(LzLeagueContext db)
@@ -50,6 +56,36 @@
 
         public async Task UpdateUser(ApplicationUser user)
         {
+            this.db.Users.Update(user);
+            await this.db.SaveChangesAsync();
+        }
+
+        public async Task AddPoints(ApplicationUser user, string pointsType)
+        {
+            switch (pointsType)
+            {
+                case "score":
+                    user.TotalScore += GuessedScorePoints;
+                    user.Prediction.GuessedScores++;
+                    break;
+                case "result":
+                    user.TotalScore += GuessedResultPoints;
+                    user.Prediction.GuessedResults++;
+                    break;
+                case "groupWinner":
+                    user.TotalScore += GuessedWinnerPoints;
+                    user.Prediction.GuessedGroupWinners++;
+                    break;
+                case "secondPlace":
+                    user.TotalScore += GuessedSecondPlacePoints;
+                    user.Prediction.GuessedSecondPlaces++;
+                    break;
+                case "thirdPlace":
+                    user.TotalScore += GuessedElQualifierPoints;
+                    user.Prediction.GuessedElTeams++;
+                    break;
+            }
+
             this.db.Users.Update(user);
             await this.db.SaveChangesAsync();
         }

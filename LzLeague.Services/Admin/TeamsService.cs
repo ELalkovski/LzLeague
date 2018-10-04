@@ -39,6 +39,9 @@
             {
                 group.Teams = group.Teams
                     .OrderByDescending(t => t.Points)
+                    .ThenByDescending(t => t.GoalsScored - t.GoalsReceived)
+                    .ThenByDescending(t => t.GoalsScored)
+                    .ThenByDescending(t => t.Wins)
                     .ToList();
             }
 
@@ -250,6 +253,28 @@
         {
             this.db.Teams.Remove(team);
             await this.db.SaveChangesAsync();
+        }
+
+        public async Task AddStatistics(Team team, string statType)
+        {
+            switch (statType)
+            {
+                case "win":
+                    team.Wins++;
+                    team.Points += WinPoints;
+                    break;
+                case "draw":
+                    team.Draws++;
+                    team.Points += DrawPoints;
+                    break;
+                case "loss":
+                    team.Loses++;
+                    break;
+            }
+
+            this.db.Teams.Update(team);
+            await this.db.SaveChangesAsync();
+            await this.UpdateTeamsPositions(team.Group);
         }
 
         private async Task UpdateTeamsPositions(Group group)
