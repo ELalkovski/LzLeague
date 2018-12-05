@@ -6,48 +6,62 @@
 
 <div class="row" style="margin-top: 20px; margin-bottom: 20px">
     <div class="col-md-6 col-xs-2 offset-md-1">
+        <div id="success-msg-teams-details" class="alert alert-success" style="display: none">
+        </div>
+        <div id="warning-msg-teams-details" class="alert alert-danger" style="display: none">
+        </div>
         @if (User.IsInRole("Admin"))
         {
 
         }
         <div class="card shadow-lg">
             <div class="card-header text-center">
-                <img src="@Model.ImageUrl" class="card-img" style="width: 13em" />
+                <img src="@Model.ImageUrl" class="card-img" style="width: 13em"/>
             </div>
             <div class="card-header">
                 <h3 class="text-center" style="color: #4C6990">Group @Model.Group.Name</h3>
                 <p class="text-center">Matches Played: @Model.Group.MatchesPlayed</p>
-                <hr />
+                <hr/>
                 <h2 class="text-center">@Model.Name</h2>
             </div>
             <div id="team-details" class="card-body">
                 <span><b>Position </b></span> <span class="float-md-right">@Model.Position</span>
-                <hr />
+                <hr/>
                 <span><b>Wins </b></span> <span class="float-md-right">@Model.Wins</span>
-                <hr />
+                <hr/>
                 <span><b>Draws </b></span> <span class="float-md-right">@Model.Draws</span>
-                <hr />
+                <hr/>
                 <span><b>Loses </b></span> <span class="float-md-right">@Model.Loses</span>
-                <hr />
+                <hr/>
                 <span><b>Goals Scored </b></span> <span class="float-md-right">@Model.GoalsScored</span>
-                <hr />
+                <hr/>
                 <span><b>Goals Received </b></span> <span class="float-md-right">@Model.GoalsReceived</span>
-                <hr />
+                <hr/>
                 <span><b>Goals Difference </b></span> <span class="float-md-right">@(Model.GoalsScored - Model.GoalsReceived)</span>
-                <hr />
+                <hr/>
                 <span><b>Points </b></span> <span class="float-md-right">@Model.Points</span>
             </div>
             <div class="card-footer">
                 @if (User.IsInRole("Admin") && Model.Group.MatchesPlayed == 0)
                 {
-                    <a class="btn btn-danger float-md-right" style="color:white" data-toggle="modal" data-target="#modal-delete-team">
+                    <a class="btn btn-danger float-md-right" style="color: white" data-toggle="modal" data-target="#modal-delete-team">
                         Delete Team
                     </a>
                 }
                 @if (User.IsInRole("Admin"))
                 {
-                    <a class="btn btn-info float-md-right" style="color:white" data-toggle="modal" data-target="#modal-change-team-statistics">
-                        Change Statistics
+                    <a asp-area="Admin" 
+                       asp-controller="Teams" 
+                       asp-action="MovePositionUp"  
+                       asp-route-teamId="@Model.Id" 
+                       asp-route-groupId="@Model.GroupId" class="btn btn-warning float-md-right" style="color: white">
+                        Move Position Up
+                    </a>
+                    <a class="btn btn-danger float-md-right" style="color: white; margin-right: 10px" data-toggle="modal" data-target="#modal-remove-team-points">
+                        Remove Points
+                    </a>
+                    <a class="btn btn-info float-md-right" style="color: white; margin-right: 10px" data-toggle="modal" data-target="#modal-add-team-points">
+                        Add Points
                     </a>
                 }
             </div>
@@ -79,16 +93,16 @@
 </div>
 
 
-<div class="modal fade" id="modal-change-team-statistics" tabindex="-1" role="dialog" aria-labelledby="confirmation-modal-label" aria-hidden="true">
+<div class="modal fade" id="modal-add-team-points" tabindex="-1" role="dialog" aria-labelledby="confirmation-modal-label" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addStatistics">Change Statistics</h5>
+                <h5 class="modal-title" id="addStatistics">Add Points</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form asp-area="Admin" asp-controller="Teams" asp-action="ChangeStatistics" method="post">
+            <form asp-area="Admin" asp-controller="Teams" asp-action="AddPoints" method="post">
                 <div class="modal-body">
                     <input type="text" name="teamId" value="@Model.Id" hidden />
                     <select name="statType" class="form-control">
@@ -108,3 +122,44 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="modal-remove-team-points" tabindex="-1" role="dialog" aria-labelledby="confirmation-modal-label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="remove-points">Remove Points</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form asp-area="Admin" asp-controller="Teams" asp-action="RemovePoints" method="post">
+                <div class="modal-body">
+                    <input type="text" name="teamId" value="@Model.Id" hidden />
+                    <select name="statType" class="form-control">
+                        <option value="win">Win</option>
+                        <option value="draw">Draw</option>
+                        <option value="loss">Loss</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit"
+                            class="btn btn-danger">
+                        Remove Points
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        let successMsg = '@TempData["SuccessMsg"]';
+        let warningMsg = '@TempData["WarningMsg"]';
+        console.log(successMsg);
+        displayMsg(successMsg, 'success-msg-teams-details');
+        displayMsg(warningMsg, 'warning-msg-teams-details');
+    </script>
+}

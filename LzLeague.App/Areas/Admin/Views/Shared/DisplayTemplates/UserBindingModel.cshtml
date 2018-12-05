@@ -44,6 +44,9 @@
         <a class="btn btn-success" style="color: white" data-toggle="modal" data-target="#add-points-@Model.Id">
             Add Points
         </a>
+        <a class="btn btn-warning" style="color: white" data-toggle="modal" data-target="#remove-points-@Model.Id">
+            Remove Points
+        </a>
     </td>
 </tr>
 
@@ -170,8 +173,40 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" 
-                       class="btn btn-info">
+                            class="btn btn-success">
                         Add Points
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="remove-points-@Model.Id" tabindex="-1" role="dialog" aria-labelledby="modal-remove-points-label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addPoints">Remove Points</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form asp-area="Admin" asp-controller="Users" asp-action="RemovePoints" method="post">
+                <div class="modal-body">
+                    <input type="text" name="email" value="@Model.Email" hidden />
+                    <select name="pointsType" class="form-control">
+                        <option value="score">Score</option>
+                        <option value="result">Result</option>
+                        <option value="groupWinner">First Place</option>
+                        <option value="secondPlace">Second Place</option>
+                        <option value="thirdPlace">Third Place</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" 
+                            class="btn btn-warning">
+                        Remove Points
                     </button>
                 </div>
             </form>

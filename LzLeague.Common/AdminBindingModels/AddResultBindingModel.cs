@@ -16,7 +16,6 @@
         [Required(ErrorMessage = "Score field is required.")]
         public string Result { get; set; }
 
-        [Required(ErrorMessage = "Result field is required.")]
         public string WinnerSign { get; set; }
 
         public IEnumerable<GroupBindingModel> AvailableGroups { get; set; }

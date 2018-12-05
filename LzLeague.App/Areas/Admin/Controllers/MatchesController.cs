@@ -1,5 +1,6 @@
 ﻿namespace LzLeague.App.Areas.Admin.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -38,10 +39,10 @@
 
             var matchesGroupedByDate = matchesVm
                 .GroupBy(m => m.Date, m => m, (key, value) => new MatchGroupDisplayModel
-            {
-                Date = key,
-                Matches = value.ToList()
-            })
+                {
+                    Date = key,
+                    Matches = value.ToList()
+                })
             .OrderBy(x => x.Date);
 
             return this.View(matchesGroupedByDate);
@@ -113,13 +114,18 @@
                 return this.RedirectToAction("Index");
             }
 
+            var goalsArgs = score
+                .Split(":", StringSplitOptions.RemoveEmptyEntries)
+                .Select(int.Parse)
+                .ToArray();
+
             var model = new AddResultBindingModel
             {
                 MatchId = matchId,
                 Result = score,
-                WinnerSign = result
+                WinnerSign = (goalsArgs[0] > goalsArgs[1]) ? "1" : (goalsArgs[0] < goalsArgs[1] ? "2" : "x")
             };
-            
+
             await this.ts.EditTeamsStatistics(match, score, result);
             await this.ps.EditUsersScores(match, score, result);
             await this.ms.UpdateMatchResults(model);
@@ -151,7 +157,12 @@
             }
 
             var group = await this.ts.GetGroupById(model.GroupId);
-            model.WinnerSign = model.WinnerSign.ToLower();
+            var goalsArgs = model.Result
+                .Split(":", StringSplitOptions.RemoveEmptyEntries)
+                .Select(int.Parse)
+                .ToArray();
+
+            model.WinnerSign = (goalsArgs[0] > goalsArgs[1]) ? "1" : (goalsArgs[0] < goalsArgs[1] ? "2" : "x");
 
             if (group.MatchesPlayed == 12)
             {

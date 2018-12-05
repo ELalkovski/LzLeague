@@ -180,9 +180,34 @@
         {
             var user = await this.us.GetUserByEmail(email);
 
+            if (user == null)
+            {
+                this.TempData["WarningMsg"] = "Something went wrong, user does not exists!";
+                return this.RedirectToAction("Index");
+            }
+
             await this.us.AddPoints(user, pointsType);
 
-            return this.RedirectToAction("UsersStandings", "Predictions", new {area = ""});
+            this.TempData["SuccessMsg"] = $"{pointsType} points added to {email}";
+            return this.RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> RemovePoints(string pointsType, string email)
+        {
+            var user = await this.us.GetUserByEmail(email);
+
+            if (user == null)
+            {
+                this.TempData["WarningMsg"] = "Something went wrong, user does not exists!";
+                return this.RedirectToAction("Index");
+            }
+
+            await this.us.RemovePoints(user, pointsType);
+
+            this.TempData["SuccessMsg"] = $"{pointsType} points removed from {email}";
+            return this.RedirectToAction("Index");
         }
 
         private async Task PopulateTeamsLogos(List<MatchResultBindingModel> matchesVm)

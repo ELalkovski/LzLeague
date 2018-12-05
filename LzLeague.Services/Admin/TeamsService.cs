@@ -1,5 +1,6 @@
 ﻿namespace LzLeague.Services.Admin
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -38,10 +39,7 @@
             foreach (var group in groups)
             {
                 group.Teams = group.Teams
-                    .OrderByDescending(t => t.Points)
-                    .ThenByDescending(t => t.GoalsScored - t.GoalsReceived)
-                    .ThenByDescending(t => t.GoalsScored)
-                    .ThenByDescending(t => t.Wins)
+                    .OrderBy(t => t.Position)
                     .ToList();
             }
 
@@ -103,7 +101,7 @@
             var homeTeam = await this.GetTeamByName(homeTeamName);
             var awayTeam = await this.GetTeamByName(awayTeamName);
             var goalsArgs = score
-                .Split(':')
+                .Split(":", StringSplitOptions.RemoveEmptyEntries)
                 .Select(int.Parse)
                 .ToList();
 
@@ -143,12 +141,12 @@
             var homeTeam = await this.GetTeamByName(match.HomeTeam);
             var awayTeam = await this.GetTeamByName(match.AwayTeam);
             var newGoalsArgs = score
-                .Split(':')
+                .Split(":", StringSplitOptions.RemoveEmptyEntries)
                 .Select(int.Parse)
                 .ToList();
 
             var prevGoalsArgs = match.Result
-                .Split(':')
+                .Split(":", StringSplitOptions.RemoveEmptyEntries)
                 .Select(int.Parse)
                 .ToList();
 
@@ -233,6 +231,7 @@
         {
             return await this.db
                 .Teams
+                .Include(t => t.PlayedMatches)
                 .FirstOrDefaultAsync(t => t.Name == name.Trim());
         }
 
@@ -241,6 +240,8 @@
             return await this.db
                 .Teams
                 .Include(t => t.Group)
+                .ThenInclude(g => g.Teams)
+                .Include(t => t.PlayedMatches)
                 .FirstOrDefaultAsync(t => t.Id == teamId);
         }
 
@@ -255,7 +256,7 @@
             await this.db.SaveChangesAsync();
         }
 
-        public async Task AddStatistics(Team team, string statType)
+        public async Task AddPoints(Team team, string statType)
         {
             switch (statType)
             {
@@ -275,6 +276,34 @@
             this.db.Teams.Update(team);
             await this.db.SaveChangesAsync();
             await this.UpdateTeamsPositions(team.Group);
+        }
+
+        public async Task RemovePoints(Team team, string statType)
+        {
+            switch (statType)
+            {
+                case "win":
+                    team.Wins--;
+                    team.Points -= WinPoints;
+                    break;
+                case "draw":
+                    team.Draws--;
+                    team.Points -= DrawPoints;
+                    break;
+                case "loss":
+                    team.Loses--;
+                    break;
+            }
+
+            this.db.Teams.Update(team);
+            await this.db.SaveChangesAsync();
+            await this.UpdateTeamsPositions(team.Group);
+        }
+
+        public async Task Update(Team team)
+        {
+            this.db.Teams.Update(team);
+            await this.db.SaveChangesAsync();
         }
 
         private async Task UpdateTeamsPositions(Group group)

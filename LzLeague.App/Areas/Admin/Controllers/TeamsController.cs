@@ -6,6 +6,7 @@
     using AutoMapper;
     using Common.AdminBindingModels;
     using LzLeague.Models;
+    using LzLeague.Services.Base.Contracts;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Services.Admin.Contracts;
@@ -14,11 +15,13 @@
     public class TeamsController : Controller
     {
         private readonly ITeamsService ts;
+        private readonly IPredictionsService ps;
         private readonly IMapper mapper;
 
-        public TeamsController(ITeamsService ts, IMapper mapper)
+        public TeamsController(ITeamsService ts, IPredictionsService ps, IMapper mapper)
         {
             this.ts = ts;
+            this.ps = ps;
             this.mapper = mapper;
         }
 
@@ -106,9 +109,55 @@
             return this.RedirectToAction("Index");
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> MovePositionUp(int teamId, int groupId)
+        {
+            var group = await this.ts.GetGroupById(groupId);
+
+            if (group == null)
+            {
+                this.TempData["WarningMsg"] = "Sorry, group you are trying to reach does not exists.";
+                return this.RedirectToAction("Index");
+            }
+
+            var teamToMoveUp = await this.ts.GetTeamById(teamId);
+
+            if (teamToMoveUp.Position == 1)
+            {
+                this.TempData["WarningMsg"] = "Team is already on the first place!";
+                return this.RedirectToAction("Index");
+            }
+
+            var previousTeam = group
+                .Teams
+                .FirstOrDefault(t => t.Position == teamToMoveUp.Position - 1);
+
+            if (previousTeam == null)
+            {
+                this.TempData["WarningMsg"] = "Team is already on the first place!";
+                return this.RedirectToAction("Index");
+            }
+
+            teamToMoveUp.Position--;
+            previousTeam.Position++;
+
+            await this.ts.Update(teamToMoveUp);
+            await this.ts.Update(previousTeam);
+
+            //if (group.MatchesPlayed == 12)
+            //{
+            //    await this.ps.EditRankingResults(group);
+            //}
+
+            this.TempData["SuccessMsg"] = "Team was moved up successfully.";
+
+            return this.RedirectToAction("Index");
+        }
+
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> ChangeStatistics(int teamId, string statType)
+        public async Task<IActionResult> AddPoints(int teamId, string statType)
         {
             var team = await this.ts.GetTeamById(teamId);
 
@@ -118,8 +167,27 @@
                 return this.RedirectToAction("Index");
             }
 
-            await this.ts.AddStatistics(team, statType);
+            await this.ts.AddPoints(team, statType);
 
+            this.TempData["SuccessMsg"] = "Points added successfully.";
+            return this.RedirectToAction("Details", new { teamId });
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> RemovePoints(int teamId, string statType)
+        {
+            var team = await this.ts.GetTeamById(teamId);
+
+            if (team == null)
+            {
+                this.TempData["WarningMsg"] = "Sorry, team you are trying to reach doesn't exist.";
+                return this.RedirectToAction("Index");
+            }
+
+            await this.ts.RemovePoints(team, statType);
+
+            this.TempData["SuccessMsg"] = "Points removed successfully.";
             return this.RedirectToAction("Details", new { teamId });
         }
     }

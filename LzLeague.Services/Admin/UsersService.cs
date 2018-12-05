@@ -90,6 +90,36 @@
             await this.db.SaveChangesAsync();
         }
 
+        public async Task RemovePoints(ApplicationUser user, string pointsType)
+        {
+            switch (pointsType)
+            {
+                case "score":
+                    user.TotalScore -= GuessedScorePoints;
+                    user.Prediction.GuessedScores--;
+                    break;
+                case "result":
+                    user.TotalScore -= GuessedResultPoints;
+                    user.Prediction.GuessedResults--;
+                    break;
+                case "groupWinner":
+                    user.TotalScore -= GuessedWinnerPoints;
+                    user.Prediction.GuessedGroupWinners--;
+                    break;
+                case "secondPlace":
+                    user.TotalScore -= GuessedSecondPlacePoints;
+                    user.Prediction.GuessedSecondPlaces--;
+                    break;
+                case "thirdPlace":
+                    user.TotalScore -= GuessedElQualifierPoints;
+                    user.Prediction.GuessedElTeams--;
+                    break;
+            }
+
+            this.db.Users.Update(user);
+            await this.db.SaveChangesAsync();
+        }
+
         private async Task DeleteUserPrediction(ApplicationUser user)
         {
             var prediction = await this.db

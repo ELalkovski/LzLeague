@@ -33,6 +33,10 @@
 
         Task EditTeamsStatistics(Match match, string score, string result);
 
-        Task AddStatistics(Team team, string statType);
+        Task AddPoints(Team team, string statType);
+
+        Task RemovePoints(Team team, string statType);
+
+        Task Update(Team team);
     }
 }

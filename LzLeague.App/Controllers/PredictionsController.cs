@@ -127,6 +127,8 @@
             var predictionsVm = this.mapper
                 .Map<ICollection<Prediction>, ICollection<UserStandingBindingModel>>(predictions)
                 .OrderByDescending(p => p.TotalScore)
+                .ThenByDescending(p => p.GuessedScores)
+                .ThenByDescending(p => p.GuessedResults)
                 .ToList();
 
             return this.View(predictionsVm);

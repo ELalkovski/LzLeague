@@ -17,5 +17,7 @@
         Task UpdateUserPrediction(ICollection<MatchResultPrediction> matchesResults, ICollection<GroupWinnerPrediction> groupWinners);
 
         Task AddPoints(ApplicationUser user, string pointsType);
+
+        Task RemovePoints(ApplicationUser user, string pointsType);
     }
 }
