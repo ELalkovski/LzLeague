@@ -11,7 +11,7 @@
     public class UsersService : IUsersService
     {
         private const int GuessedScorePoints = 5;
-        private const int GuessedResultPoints = 2;
+        private const int GuessedResultPoints = 3;
         private const int GuessedWinnerPoints = 7;
         private const int GuessedSecondPlacePoints = 5;
         private const int GuessedElQualifierPoints = 3;
