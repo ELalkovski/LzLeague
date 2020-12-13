@@ -141,7 +141,7 @@
                 .Map<Prediction, PredictionBindingModel>(prediction);            
 
             predictionVm.MatchesResults = this.mapper
-                .Map<ICollection<MatchResultPrediction>, ICollection<MatchResultBindingModel>>(prediction
+                .Map<ICollection<MatchResultPrediction>, IList<MatchResultBindingModel>>(prediction
                     .MatchResultsPredictions);
 
             await this.PopulateTeamsLogos(predictionVm.MatchesResults.ToList());
@@ -214,8 +214,8 @@
         {
             foreach (var match in matchesVm)
             {
-                match.HomeTeamLogo = await this.ts.GetTeamLogo(match.Match.HomeTeam);
-                match.AwayTeamLogo = await this.ts.GetTeamLogo(match.Match.AwayTeam);
+                match.HomeTeamLogo = await this.ts.GetTeamLogo(match.Match.HomeTeam.Name);
+                match.AwayTeamLogo = await this.ts.GetTeamLogo(match.Match.AwayTeam.Name);
             }
         }
     }

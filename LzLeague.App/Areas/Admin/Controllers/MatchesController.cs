@@ -10,6 +10,7 @@
     using LzLeague.Services.Base.Contracts;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Newtonsoft.Json;
     using Services.Admin.Contracts;
 
     [Area("Admin")]
@@ -199,12 +200,18 @@
         public JsonResult GetAvailableMatchesByGroup(int groupId)
         {
             var matches = this.ms.GetMatchesByGroup(groupId);
-            var matchesVm = this.mapper
-                .Map<ICollection<Match>, ICollection<MatchBindingModel>>(matches)
+
+            matches = matches
                 .Where(m => m.Result == null && m.WinnerSign == null)
                 .ToList();
 
-            return this.Json(matchesVm);
+            var matchesVm = this.mapper
+                .Map<ICollection<Match>, ICollection<MatchBindingModel>>(matches);
+
+            return this.Json(matchesVm, new JsonSerializerSettings 
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
         }
 
         private IEnumerable<GroupBindingModel> SetAvailableGroups()

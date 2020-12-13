@@ -33,6 +33,7 @@
         public int? GroupId { get; set; }
         public GroupBindingModel Group { get; set; }
 
-        public ICollection<Match> PlayedMatches { get; set; }
+        public IList<Match> HomePlayedMatches { get; set; }
+        public IList<Match> AwayPlayedMatches { get; set; }
     }
 }

@@ -11,7 +11,7 @@
     @Html.HiddenFor(x => x.Match.GroupId)
 
     <label class="form-check-inline" style="font-style:italic; font-weight: normal">
-        @Model.Match.Date.Value.ToShortDateString() @*/ @Model.Match.BeginTime.Value.Hours:@Model.Match.BeginTime.Value.Minutes.ToString("00")*@
+        @Model.Match.Date.Value.ToShortDateString()
     </label>
     <label class="col-md-2 col-lg-2 form-check-inline">
         <span>
@@ -50,7 +50,7 @@
             <option value="x">X</option>
             <option value="2">2</option>
         </select>
-        @*<input asp-for="PredictionSign" type="text" placeholder="Result" class="form-control" style="width: 5em" />*@
+
         @if (Model.Match.WinnerSign != null && Model.Match.WinnerSign == Model.PredictionSign)
         {
             <i class="fas fa-check"></i>

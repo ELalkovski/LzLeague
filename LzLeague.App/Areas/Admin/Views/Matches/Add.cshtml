@@ -23,18 +23,18 @@
                     <div class="form-group">
                         <b><label asp-for="HomeTeam">Home Team</label></b>
                         <select id="home-teams" class="form-control" disabled
-                                asp-for="HomeTeam">
+                                asp-for="HomeTeamId">
                             <option>Please select a group, so the teams could be loaded.</option>
                         </select>
-                        <span asp-validation-for="HomeTeam" class="text-danger"></span>
+                        <span asp-validation-for="HomeTeamId" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <b><label asp-for="AwayTeam">Away Team</label></b>
                         <select id="away-teams" class="form-control" disabled
-                                asp-for="AwayTeam">
+                                asp-for="AwayTeamId">
                             <option>Please select a group, so the teams could be loaded.</option>
                         </select>
-                        <span asp-validation-for="AwayTeam" class="text-danger"></span>
+                        <span asp-validation-for="AwayTeamId" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <b><label asp-for="Date"></label></b>
@@ -86,7 +86,7 @@
                         let currentTeam = teams[teamIndex];
                         let currentOption = $('<option>')
                             .text(currentTeam.name)
-                            .val(currentTeam.name);
+                            .val(currentTeam.id);
 
                         $('#home-teams').append($(currentOption));
                     }
@@ -96,7 +96,7 @@
                         let currentTeam = teams[teamIndex];
                         let currentOption = $('<option>')
                             .text(currentTeam.name)
-                            .val(currentTeam.name);
+                            .val(currentTeam.id);
 
                         $('#away-teams').append($(currentOption));
                     }
@@ -117,8 +117,8 @@
         });
 
         $('#home-teams').change(function() {
-            let selectedOptionName = $(this).find('option:selected').val();
-
+            let selectedTeamId = $(this).find('option:selected').val();
+            console.log(selectedTeamId);
             $('#away-teams').empty();
             $('#away-teams').append($('<option>')
                 .text('Please select a team...')
@@ -127,12 +127,13 @@
             for (let teamIndex in availableTeams) {
 
                 let currentTeam = availableTeams[teamIndex];
+                console.log(currentTeam);
 
-                if (currentTeam.name !== selectedOptionName) {
+                if (currentTeam.id != selectedTeamId) {
 
                     let currentOption = $('<option>')
                         .text(currentTeam.name)
-                        .val(currentTeam.name);
+                        .val(currentTeam.id);
 
                     $('#away-teams').append($(currentOption));
                 }

@@ -15,7 +15,7 @@ namespace LzLeague.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.1-rtm-30846")
+                .HasAnnotation("ProductVersion", "2.1.14-servicing-32113")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -162,8 +162,7 @@ namespace LzLeague.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AwayTeam")
-                        .IsRequired();
+                    b.Property<int>("AwayTeamId");
 
                     b.Property<TimeSpan>("BeginTime");
 
@@ -171,20 +170,19 @@ namespace LzLeague.Data.Migrations
 
                     b.Property<int?>("GroupId");
 
-                    b.Property<string>("HomeTeam")
-                        .IsRequired();
+                    b.Property<int>("HomeTeamId");
 
                     b.Property<string>("Result");
-
-                    b.Property<int?>("TeamId");
 
                     b.Property<string>("WinnerSign");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AwayTeamId");
+
                     b.HasIndex("GroupId");
 
-                    b.HasIndex("TeamId");
+                    b.HasIndex("HomeTeamId");
 
                     b.ToTable("Matches");
                 });
@@ -405,13 +403,19 @@ namespace LzLeague.Data.Migrations
 
             modelBuilder.Entity("LzLeague.Models.Match", b =>
                 {
+                    b.HasOne("LzLeague.Models.Team", "AwayTeam")
+                        .WithMany("AwayPlayedMatches")
+                        .HasForeignKey("AwayTeamId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("LzLeague.Models.Group", "Group")
                         .WithMany()
                         .HasForeignKey("GroupId");
 
-                    b.HasOne("LzLeague.Models.Team")
-                        .WithMany("PlayedMatches")
-                        .HasForeignKey("TeamId");
+                    b.HasOne("LzLeague.Models.Team", "HomeTeam")
+                        .WithMany("HomePlayedMatches")
+                        .HasForeignKey("HomeTeamId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("LzLeague.Models.MatchResultPrediction", b =>

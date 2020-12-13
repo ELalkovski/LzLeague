@@ -51,7 +51,7 @@
             model = this.mapper.Map<PredictionBindingModel>(existingPrediction);
 
             model.MatchesResults = this.mapper
-                .Map<ICollection<MatchResultPrediction>, ICollection<MatchResultBindingModel>>(existingPrediction
+                .Map<ICollection<MatchResultPrediction>, IList<MatchResultBindingModel>>(existingPrediction
                     .MatchResultsPredictions)
                     .OrderBy(x => x.Match.Date)
                     .ThenBy(x => x.Match.Group.Name)
@@ -138,8 +138,8 @@
         {
             var matchesVm = this.mapper
                 .Map<IEnumerable<Match>, IEnumerable<MatchResultBindingModel>>(this.ms.GetAllMatches())
-                .OrderBy(m => m.Match.Group.Name)
-                .ThenBy(m => m.Match.Date)
+                .OrderBy(m => m.Match.Date)
+                .ThenBy(m => m.Match.Group.Name)
                 .ToList();
 
             await this.PopulateTeamsLogos(matchesVm);
@@ -162,8 +162,8 @@
         {
             foreach (var match in matchesVm)
             {
-                match.HomeTeamLogo = await this.ts.GetTeamLogo(match.Match.HomeTeam);
-                match.AwayTeamLogo = await this.ts.GetTeamLogo(match.Match.AwayTeam);
+                match.HomeTeamLogo = await this.ts.GetTeamLogo(match.Match.HomeTeam.Name);
+                match.AwayTeamLogo = await this.ts.GetTeamLogo(match.Match.AwayTeam.Name);
             }
         }
     }

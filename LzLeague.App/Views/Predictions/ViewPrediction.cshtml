@@ -9,14 +9,36 @@
         <h4 style="color: #6c757d; font-weight: bold;"><em>@TempData["FullName"]'s Prediction</em></h4>
         <a class="btn btn-info" asp-area="" asp-controller="Predictions" asp-action="UsersStandings">Standings</a>
         <hr />
-        <div class="card shadow-lg">
-            <div class="card-header">
-                <h5>Matches Results</h5>
+        @{
+            var matchDays = Model.MatchesResults
+                .Select(x => x.Match.Date)
+                .Distinct()
+                .ToList();
+
+            var countForDay = 8; // 8
+            var start = 0;
+            var end = countForDay;
+
+            <div id="match-results">
+                @for (int i = 0; i < matchDays.Count(); i++)
+                {
+
+                    <div class="card shadow-lg" style="margin-top: 40px">
+                        <div class="card-header">
+                            <h5>@matchDays[i].Value.ToString("dd/MM/yyyy")</h5>
+                        </div>
+                        @for (int j = start; j < end; j++)
+                        {
+                            <div class="card-body">
+                                @Html.DisplayFor(m => Model.MatchesResults[j])
+                            </div>
+                        }
+                    </div>
+                    start += countForDay;
+                    end += countForDay;
+                }
             </div>
-            <div class="card-body" id="match-results">
-                @Html.DisplayFor(model => model.MatchesResults)
-            </div>
-        </div>
+        }
     </div>
 </div>
 <div class="row page-content">

@@ -12,10 +12,12 @@
         public Group Group { get; set; }
 
         [Required]
-        public string HomeTeam { get; set; }
+        public int HomeTeamId { get; set; }
+        public Team HomeTeam { get; set; }
 
         [Required]
-        public string AwayTeam { get; set; }
+        public int AwayTeamId { get; set; }
+        public Team AwayTeam { get; set; }
 
         public string Result { get; set; }
 

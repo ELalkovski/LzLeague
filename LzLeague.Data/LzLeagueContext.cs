@@ -24,6 +24,20 @@
         {
             base.OnModelCreating(builder);
 
+            builder.Entity<Match>(entity =>
+            {
+                entity.HasOne(x => x.HomeTeam)
+                .WithMany(t => t.HomePlayedMatches)
+                .HasForeignKey(x => x.HomeTeamId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(x => x.AwayTeam)
+                .WithMany(t => t.AwayPlayedMatches)
+                .HasForeignKey(x => x.AwayTeamId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            });
+
             builder.Entity<Prediction>(entity =>
             {
                 entity.HasOne(p => p.Owner)
