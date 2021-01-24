@@ -242,9 +242,6 @@
                 .Include(t => t.Group)
                 .ThenInclude(g => g.Teams)
                 .Include(t => t.PlayedMatches)
-=======
-
->>>>>>> .theirs
                 .FirstOrDefaultAsync(t => t.Id == teamId);
         }
 
