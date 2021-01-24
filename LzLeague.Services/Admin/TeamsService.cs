@@ -84,6 +84,14 @@
             await this.db.SaveChangesAsync();
         }
 
+        public async Task UpdateTeam(Team team)
+        {
+            var teamEntry = this.db.Teams.FirstOrDefault(x => x.Id == team.Id);
+
+            this.db.Entry(teamEntry).CurrentValues.SetValues(team);
+            await this.db.SaveChangesAsync();
+        }
+
         public async Task UpdateGroupMatchesCount(Group group)
         {
             group.MatchesPlayed++;
@@ -239,9 +247,12 @@
         {
             return await this.db
                 .Teams
+                .AsNoTracking()
                 .Include(t => t.Group)
                 .ThenInclude(g => g.Teams)
+                .AsNoTracking()
                 .Include(t => t.PlayedMatches)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(t => t.Id == teamId);
         }
 

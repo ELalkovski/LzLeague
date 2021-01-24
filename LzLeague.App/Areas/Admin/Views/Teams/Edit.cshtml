@@ -1,0 +1,40 @@
+﻿@model LzLeague.Common.AdminBindingModels.TeamBindingModel
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row" style="margin-top: 2em">
+    <div class="col-md-6 offset-md-3">
+        <div class="card shadow-lg bg-white rounded">
+            <div class="card-header admin-header">
+                Edit Team
+            </div>
+            <div class="card-body">
+                <form asp-area="Admin" asp-controller="Teams" asp-action="Edit" method="post">
+                    @Html.HiddenFor(x => x.GroupId)
+                    @Html.HiddenFor(x => x.Id)
+                    <div class="form-group">
+                        <b><label asp-for="Name" class="form"></label></b>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <b><label asp-for="Group.Name">Group</label></b>
+                        <input asp-for="Group.Name" class="form-control" />
+                        <span asp-validation-for="Group.Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <b><label asp-for="ImageUrl"></label></b>
+                        <input asp-for="ImageUrl" class="form-control" />
+                        <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-warning float-md-right">Edit Team</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

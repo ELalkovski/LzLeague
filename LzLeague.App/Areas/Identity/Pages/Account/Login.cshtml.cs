@@ -27,6 +27,7 @@
             this._userManager = userManager;
             this._signInManager = signInManager;
             this._logger = logger;
+            this.Input = new LoginInputModel();
         }
 
         [BindProperty]
@@ -47,7 +48,7 @@
                 {
                     this.ModelState.AddModelError(string.Empty, this.ErrorMessage);
                 }
-
+                
                 returnUrl = returnUrl ?? Url.Content("~/");
 
                 // Clear the existing external cookie to ensure a clean login process
