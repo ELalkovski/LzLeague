@@ -67,9 +67,8 @@
         {
             return this.db
                 .Matches
-                .Include(m => m.HomeTeam)
-                .Include(m => m.AwayTeam)
                 .Where(m => m.GroupId == groupId)
+                .Include(m => m.Group)
                 .ToList();
         }
     }

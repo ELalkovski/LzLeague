@@ -10,14 +10,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LzLeague.Data.Migrations
 {
     [DbContext(typeof(LzLeagueContext))]
-    [Migration("20201206134719_init-database")]
-    partial class initdatabase
+    [Migration("20180820135759_AddedScoresStatisticsToPrediction")]
+    partial class AddedScoresStatisticsToPrediction
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.14-servicing-32113")
+                .HasAnnotation("ProductVersion", "2.1.1-rtm-30846")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -37,8 +37,6 @@ namespace LzLeague.Data.Migrations
                     b.Property<bool>("EmailConfirmed");
 
                     b.Property<string>("FullName");
-
-                    b.Property<bool>("IsApproved");
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -89,8 +87,6 @@ namespace LzLeague.Data.Migrations
                     b.Property<string>("Content")
                         .IsRequired();
 
-                    b.Property<string>("CoverUrl");
-
                     b.Property<string>("Title")
                         .IsRequired();
 
@@ -107,13 +103,10 @@ namespace LzLeague.Data.Migrations
 
                     b.Property<int>("ArticleId");
 
-                    b.Property<string>("AuthorId")
-                        .IsRequired();
+                    b.Property<string>("AuthorId");
 
                     b.Property<string>("Content")
                         .IsRequired();
-
-                    b.Property<DateTime>("PublicationDate");
 
                     b.HasKey("Id");
 
@@ -164,7 +157,8 @@ namespace LzLeague.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("AwayTeamId");
+                    b.Property<string>("AwayTeam")
+                        .IsRequired();
 
                     b.Property<TimeSpan>("BeginTime");
 
@@ -172,19 +166,20 @@ namespace LzLeague.Data.Migrations
 
                     b.Property<int?>("GroupId");
 
-                    b.Property<int>("HomeTeamId");
+                    b.Property<string>("HomeTeam")
+                        .IsRequired();
 
                     b.Property<string>("Result");
+
+                    b.Property<int?>("TeamId");
 
                     b.Property<string>("WinnerSign");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AwayTeamId");
-
                     b.HasIndex("GroupId");
 
-                    b.HasIndex("HomeTeamId");
+                    b.HasIndex("TeamId");
 
                     b.ToTable("Matches");
                 });
@@ -241,10 +236,6 @@ namespace LzLeague.Data.Migrations
 
                     b.Property<int>("Draws");
 
-                    b.Property<int>("GoalsReceived");
-
-                    b.Property<int>("GoalsScored");
-
                     b.Property<int>("GroupId");
 
                     b.Property<string>("ImageUrl");
@@ -253,6 +244,8 @@ namespace LzLeague.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired();
+
+                    b.Property<int>("PlayedMatchesCount");
 
                     b.Property<int>("Points");
 
@@ -386,8 +379,7 @@ namespace LzLeague.Data.Migrations
 
                     b.HasOne("LzLeague.Models.ApplicationUser", "Author")
                         .WithMany()
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("AuthorId");
                 });
 
             modelBuilder.Entity("LzLeague.Models.GroupWinnerPrediction", b =>
@@ -405,19 +397,13 @@ namespace LzLeague.Data.Migrations
 
             modelBuilder.Entity("LzLeague.Models.Match", b =>
                 {
-                    b.HasOne("LzLeague.Models.Team", "AwayTeam")
-                        .WithMany("AwayPlayedMatches")
-                        .HasForeignKey("AwayTeamId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("LzLeague.Models.Group", "Group")
                         .WithMany()
                         .HasForeignKey("GroupId");
 
-                    b.HasOne("LzLeague.Models.Team", "HomeTeam")
-                        .WithMany("HomePlayedMatches")
-                        .HasForeignKey("HomeTeamId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                    b.HasOne("LzLeague.Models.Team")
+                        .WithMany("PlayedMatches")
+                        .HasForeignKey("TeamId");
                 });
 
             modelBuilder.Entity("LzLeague.Models.MatchResultPrediction", b =>

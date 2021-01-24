@@ -58,36 +58,27 @@
                 $.ajax({
                     url: '/Admin/Matches/GetAvailableMatchesByGroup',
                     method: 'GET',
-                    data: { 'groupId': Number(selectedValue) },
-                    success: function (matches) {
+                    data: { 'groupId': Number(selectedValue) }
+                }).then(function (matches) {
 
-                        $('#available-matches').empty();
+                    $('#available-matches').empty();
 
-                        $('#available-matches').append($('<option>')
-                            .text('Please select match...')
-                            .prop('selected', 'selected'));
+                    $('#available-matches').append($('<option>')
+                        .text('Please select match...')
+                        .prop('selected', 'selected'));
 
-                        for (let matchIndex in matches) {
+                    for (let matchIndex in matches) {
 
-                            let currentMatch = matches[matchIndex];
+                        let currentMatch = matches[matchIndex];
+                        let matchTitle = currentMatch.homeTeam + ' - ' + currentMatch.awayTeam;
+                        let currentOption = $('<option>')
+                            .text(matchTitle)
+                            .val(currentMatch.id);
 
-                            if (currentMatch) {
-                                let matchTitle = currentMatch['HomeTeamName'] + ' - ' + currentMatch['AwayTeamName'];
-                                let currentOption = $('<option>')
-                                    .text(matchTitle)
-                                    .val(currentMatch['Id']);
-
-                                $('#available-matches').append($(currentOption));
-                            }
-
-
-                        }
-
-                        $('#available-matches').removeAttr('disabled');
-                    },
-                    error: function (response) {
-                        console.log(response)
+                        $('#available-matches').append($(currentOption));
                     }
+
+                    $('#available-matches').removeAttr('disabled');
                 });
             } else {
 

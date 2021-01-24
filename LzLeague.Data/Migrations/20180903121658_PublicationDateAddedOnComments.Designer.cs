@@ -4,14 +4,16 @@ using LzLeague.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LzLeague.Data.Migrations
 {
     [DbContext(typeof(LzLeagueContext))]
-    partial class LzLeagueContextModelSnapshot : ModelSnapshot
+    [Migration("20180903121658_PublicationDateAddedOnComments")]
+    partial class PublicationDateAddedOnComments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,8 +37,6 @@ namespace LzLeague.Data.Migrations
                     b.Property<bool>("EmailConfirmed");
 
                     b.Property<string>("FullName");
-
-                    b.Property<bool>("IsApproved");
 
                     b.Property<bool>("LockoutEnabled");
 

@@ -4,14 +4,16 @@ using LzLeague.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LzLeague.Data.Migrations
 {
     [DbContext(typeof(LzLeagueContext))]
-    partial class LzLeagueContextModelSnapshot : ModelSnapshot
+    [Migration("20180822135432_AddCoverUrlToArticle")]
+    partial class AddCoverUrlToArticle
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,8 +37,6 @@ namespace LzLeague.Data.Migrations
                     b.Property<bool>("EmailConfirmed");
 
                     b.Property<string>("FullName");
-
-                    b.Property<bool>("IsApproved");
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -105,13 +105,10 @@ namespace LzLeague.Data.Migrations
 
                     b.Property<int>("ArticleId");
 
-                    b.Property<string>("AuthorId")
-                        .IsRequired();
+                    b.Property<string>("AuthorId");
 
                     b.Property<string>("Content")
                         .IsRequired();
-
-                    b.Property<DateTime>("PublicationDate");
 
                     b.HasKey("Id");
 
@@ -386,8 +383,7 @@ namespace LzLeague.Data.Migrations
 
                     b.HasOne("LzLeague.Models.ApplicationUser", "Author")
                         .WithMany()
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("AuthorId");
                 });
 
             modelBuilder.Entity("LzLeague.Models.GroupWinnerPrediction", b =>

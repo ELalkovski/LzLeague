@@ -23,7 +23,7 @@
 
         Task UpdateGroupMatchesCount(Group group);
 
-        Task UpdateTeamsStatistics(Team homeTeam, Team awayTeam, string score, string result, Group group);
+        Task UpdateTeamsStatistics(string homeTeamName, string awayTeamName, string score, string result, Group group);
 
         Task<Team> GetTeamByName(string name);
 

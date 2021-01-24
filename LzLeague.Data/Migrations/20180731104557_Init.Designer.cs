@@ -4,14 +4,16 @@ using LzLeague.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LzLeague.Data.Migrations
 {
     [DbContext(typeof(LzLeagueContext))]
-    partial class LzLeagueContextModelSnapshot : ModelSnapshot
+    [Migration("20180731104557_Init")]
+    partial class Init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,8 +37,6 @@ namespace LzLeague.Data.Migrations
                     b.Property<bool>("EmailConfirmed");
 
                     b.Property<string>("FullName");
-
-                    b.Property<bool>("IsApproved");
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -87,8 +87,6 @@ namespace LzLeague.Data.Migrations
                     b.Property<string>("Content")
                         .IsRequired();
 
-                    b.Property<string>("CoverUrl");
-
                     b.Property<string>("Title")
                         .IsRequired();
 
@@ -105,13 +103,10 @@ namespace LzLeague.Data.Migrations
 
                     b.Property<int>("ArticleId");
 
-                    b.Property<string>("AuthorId")
-                        .IsRequired();
+                    b.Property<string>("AuthorId");
 
                     b.Property<string>("Content")
                         .IsRequired();
-
-                    b.Property<DateTime>("PublicationDate");
 
                     b.HasKey("Id");
 
@@ -120,40 +115,6 @@ namespace LzLeague.Data.Migrations
                     b.HasIndex("AuthorId");
 
                     b.ToTable("Comments");
-                });
-
-            modelBuilder.Entity("LzLeague.Models.Group", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("MatchesPlayed");
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Groups");
-                });
-
-            modelBuilder.Entity("LzLeague.Models.GroupWinnerPrediction", b =>
-                {
-                    b.Property<int>("GroupId");
-
-                    b.Property<int>("PredictionId");
-
-                    b.Property<string>("EuropaLeague");
-
-                    b.Property<string>("FirstPlace");
-
-                    b.Property<string>("SecondPlace");
-
-                    b.HasKey("GroupId", "PredictionId");
-
-                    b.HasIndex("PredictionId");
-
-                    b.ToTable("GroupsWinnersPredictions");
                 });
 
             modelBuilder.Entity("LzLeague.Models.Match", b =>
@@ -165,14 +126,10 @@ namespace LzLeague.Data.Migrations
                     b.Property<string>("AwayTeam")
                         .IsRequired();
 
-                    b.Property<TimeSpan>("BeginTime");
-
-                    b.Property<DateTime>("Date");
-
-                    b.Property<int?>("GroupId");
-
                     b.Property<string>("HomeTeam")
                         .IsRequired();
+
+                    b.Property<int?>("PredictionId");
 
                     b.Property<string>("Result");
 
@@ -182,28 +139,11 @@ namespace LzLeague.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GroupId");
+                    b.HasIndex("PredictionId");
 
                     b.HasIndex("TeamId");
 
                     b.ToTable("Matches");
-                });
-
-            modelBuilder.Entity("LzLeague.Models.MatchResultPrediction", b =>
-                {
-                    b.Property<int>("PredictionId");
-
-                    b.Property<int>("MatchId");
-
-                    b.Property<string>("Result");
-
-                    b.Property<string>("WinnerSign");
-
-                    b.HasKey("PredictionId", "MatchId");
-
-                    b.HasIndex("MatchId");
-
-                    b.ToTable("MatchesResultsPredictions");
                 });
 
             modelBuilder.Entity("LzLeague.Models.Prediction", b =>
@@ -211,16 +151,6 @@ namespace LzLeague.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("GuessedElTeams");
-
-                    b.Property<int>("GuessedGroupWinners");
-
-                    b.Property<int>("GuessedResults");
-
-                    b.Property<int>("GuessedScores");
-
-                    b.Property<int>("GuessedSecondPlaces");
 
                     b.Property<string>("OwnerId")
                         .IsRequired();
@@ -239,30 +169,33 @@ namespace LzLeague.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("Draws");
-
-                    b.Property<int>("GoalsReceived");
-
-                    b.Property<int>("GoalsScored");
-
-                    b.Property<int>("GroupId");
+                    b.Property<string>("Group")
+                        .IsRequired();
 
                     b.Property<string>("ImageUrl");
 
-                    b.Property<int>("Loses");
-
                     b.Property<string>("Name")
                         .IsRequired();
+
+                    b.Property<int>("PlayedMatchesCount");
 
                     b.Property<int>("Points");
 
                     b.Property<int>("Position");
 
-                    b.Property<int>("Wins");
+                    b.Property<int?>("PredictionId");
+
+                    b.Property<int?>("PredictionId1");
+
+                    b.Property<int?>("PredictionId2");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GroupId");
+                    b.HasIndex("PredictionId");
+
+                    b.HasIndex("PredictionId1");
+
+                    b.HasIndex("PredictionId2");
 
                     b.ToTable("Teams");
                 });
@@ -333,9 +266,11 @@ namespace LzLeague.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.Property<string>("LoginProvider");
+                    b.Property<string>("LoginProvider")
+                        .HasMaxLength(128);
 
-                    b.Property<string>("ProviderKey");
+                    b.Property<string>("ProviderKey")
+                        .HasMaxLength(128);
 
                     b.Property<string>("ProviderDisplayName");
 
@@ -366,9 +301,11 @@ namespace LzLeague.Data.Migrations
                 {
                     b.Property<string>("UserId");
 
-                    b.Property<string>("LoginProvider");
+                    b.Property<string>("LoginProvider")
+                        .HasMaxLength(128);
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasMaxLength(128);
 
                     b.Property<string>("Value");
 
@@ -386,45 +323,18 @@ namespace LzLeague.Data.Migrations
 
                     b.HasOne("LzLeague.Models.ApplicationUser", "Author")
                         .WithMany()
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("LzLeague.Models.GroupWinnerPrediction", b =>
-                {
-                    b.HasOne("LzLeague.Models.Group", "Group")
-                        .WithMany("GroupWinnerPredictions")
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("LzLeague.Models.Prediction", "Prediction")
-                        .WithMany("GroupsWinners")
-                        .HasForeignKey("PredictionId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("AuthorId");
                 });
 
             modelBuilder.Entity("LzLeague.Models.Match", b =>
                 {
-                    b.HasOne("LzLeague.Models.Group", "Group")
-                        .WithMany()
-                        .HasForeignKey("GroupId");
+                    b.HasOne("LzLeague.Models.Prediction")
+                        .WithMany("Matches")
+                        .HasForeignKey("PredictionId");
 
                     b.HasOne("LzLeague.Models.Team")
                         .WithMany("PlayedMatches")
                         .HasForeignKey("TeamId");
-                });
-
-            modelBuilder.Entity("LzLeague.Models.MatchResultPrediction", b =>
-                {
-                    b.HasOne("LzLeague.Models.Match", "Match")
-                        .WithMany("MatchResultPredictions")
-                        .HasForeignKey("MatchId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("LzLeague.Models.Prediction", "Prediction")
-                        .WithMany("MatchResultsPredictions")
-                        .HasForeignKey("PredictionId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("LzLeague.Models.Prediction", b =>
@@ -437,10 +347,17 @@ namespace LzLeague.Data.Migrations
 
             modelBuilder.Entity("LzLeague.Models.Team", b =>
                 {
-                    b.HasOne("LzLeague.Models.Group", "Group")
-                        .WithMany("Teams")
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.HasOne("LzLeague.Models.Prediction")
+                        .WithMany("EuropaLeagueWinners")
+                        .HasForeignKey("PredictionId");
+
+                    b.HasOne("LzLeague.Models.Prediction")
+                        .WithMany("FirstPlaceWinners")
+                        .HasForeignKey("PredictionId1");
+
+                    b.HasOne("LzLeague.Models.Prediction")
+                        .WithMany("SecondPlaceWinners")
+                        .HasForeignKey("PredictionId2");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

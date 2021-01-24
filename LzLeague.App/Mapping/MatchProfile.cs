@@ -12,8 +12,6 @@
             this.CreateMap<Match, MatchBindingModel>()
                 .ForMember(x => x.AvailableGroups, opt => opt.Ignore())
                 .ForMember(x => x.AvailableTeams, opt => opt.Ignore())
-                .ForMember(x => x.HomeTeamName, opt => opt.MapFrom(o => o.HomeTeam.Name))
-                .ForMember(x => x.AwayTeamName, opt => opt.MapFrom(o => o.AwayTeam.Name))
                 .ReverseMap();
 
             this.CreateMap<Match, MatchResultBindingModel>()

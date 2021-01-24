@@ -23,8 +23,8 @@
             // Act 
             await matchesService.CreateMatch(new Match
             {
-                HomeTeamId = 1,
-                AwayTeamId = 2,
+                HomeTeam = "Manchester United",
+                AwayTeam = "CSKA Moscow",
                 BeginTime = new TimeSpan(DateTime.UtcNow.Hour, DateTime.UtcNow.Minute, DateTime.UtcNow.Second),
                 Date = DateTime.UtcNow
             });
@@ -42,22 +42,22 @@
             // Act 
             await matchesService.CreateMatch(new Match
             {
-                HomeTeamId = 1,
-                AwayTeamId = 2,
+                HomeTeam = "Manchester United",
+                AwayTeam = "CSKA Moscow",
                 BeginTime = new TimeSpan(DateTime.UtcNow.Hour, DateTime.UtcNow.Minute, DateTime.UtcNow.Second),
                 Date = DateTime.UtcNow
             });
             await matchesService.CreateMatch(new Match
             {
-                HomeTeamId = 2,
-                AwayTeamId = 1,
+                HomeTeam = "Basel",
+                AwayTeam = "CSKA Moscow",
                 BeginTime = new TimeSpan(DateTime.UtcNow.Hour, DateTime.UtcNow.Minute, DateTime.UtcNow.Second),
                 Date = DateTime.UtcNow
             });
             await matchesService.CreateMatch(new Match
             {
-                HomeTeamId = 3,
-                AwayTeamId = 1,
+                HomeTeam = "Manchester United",
+                AwayTeam = "Basel",
                 BeginTime = new TimeSpan(DateTime.UtcNow.Hour, DateTime.UtcNow.Minute, DateTime.UtcNow.Second),
                 Date = DateTime.UtcNow
             });
@@ -74,8 +74,8 @@
 
             this.dbContext.Matches.Add(new Match
             {
-                HomeTeamId = 1,
-                AwayTeamId = 2,
+                HomeTeam = "Manchester United",
+                AwayTeam = "CSKA Moscow",
                 BeginTime = new TimeSpan(DateTime.UtcNow.Hour, DateTime.UtcNow.Minute, DateTime.UtcNow.Second),
                 Date = DateTime.UtcNow
             });
@@ -96,22 +96,22 @@
 
             this.dbContext.Matches.Add(new Match
             {
-                HomeTeamId = 1,
-                AwayTeamId = 2,
+                HomeTeam = "Manchester United",
+                AwayTeam = "CSKA Moscow",
                 BeginTime = new TimeSpan(DateTime.UtcNow.Hour, DateTime.UtcNow.Minute, DateTime.UtcNow.Second),
                 Date = DateTime.UtcNow
             });
             this.dbContext.Matches.Add(new Match
             {
-                HomeTeamId = 2,
-                AwayTeamId = 1,
+                HomeTeam = "Basel",
+                AwayTeam = "CSKA Moscow",
                 BeginTime = new TimeSpan(DateTime.UtcNow.Hour, DateTime.UtcNow.Minute, DateTime.UtcNow.Second),
                 Date = DateTime.UtcNow
             });
             this.dbContext.Matches.Add(new Match
             {
-                HomeTeamId = 3,
-                AwayTeamId = 2,
+                HomeTeam = "Manchester United",
+                AwayTeam = "Basel",
                 BeginTime = new TimeSpan(DateTime.UtcNow.Hour, DateTime.UtcNow.Minute, DateTime.UtcNow.Second),
                 Date = DateTime.UtcNow
             });
@@ -132,20 +132,20 @@
 
             this.dbContext.Matches.Add(new Match
             {
-                HomeTeamId = 1,
-                AwayTeamId = 2,
+                HomeTeam = "Manchester United",
+                AwayTeam = "CSKA Moscow",
                 BeginTime = new TimeSpan(DateTime.UtcNow.Hour, DateTime.UtcNow.Minute, DateTime.UtcNow.Second),
                 Date = DateTime.UtcNow
             });
 
             await this.dbContext.SaveChangesAsync();
-            var match = this.dbContext.Matches.FirstOrDefault(m => m.HomeTeamId == 1 && m.AwayTeamId == 2);
+            var match = this.dbContext.Matches.FirstOrDefault(m => m.HomeTeam == "Manchester United" && m.AwayTeam == "CSKA Moscow");
 
             // Act 
             await matchesService.Delete(match);
 
             // Assert
-            Assert.AreEqual(false, this.dbContext.Matches.Any(m => m.HomeTeamId == 1 && m.AwayTeamId == 2));
+            Assert.AreEqual(false, this.dbContext.Matches.Any(m => m.HomeTeam == "Manchester United" && m.AwayTeam == "CSKA Moscow"));
         }
 
         [TestInitialize]

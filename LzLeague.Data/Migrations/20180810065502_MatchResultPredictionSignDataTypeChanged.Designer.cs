@@ -4,14 +4,16 @@ using LzLeague.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LzLeague.Data.Migrations
 {
     [DbContext(typeof(LzLeagueContext))]
-    partial class LzLeagueContextModelSnapshot : ModelSnapshot
+    [Migration("20180810065502_MatchResultPredictionSignDataTypeChanged")]
+    partial class MatchResultPredictionSignDataTypeChanged
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,8 +37,6 @@ namespace LzLeague.Data.Migrations
                     b.Property<bool>("EmailConfirmed");
 
                     b.Property<string>("FullName");
-
-                    b.Property<bool>("IsApproved");
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -87,8 +87,6 @@ namespace LzLeague.Data.Migrations
                     b.Property<string>("Content")
                         .IsRequired();
 
-                    b.Property<string>("CoverUrl");
-
                     b.Property<string>("Title")
                         .IsRequired();
 
@@ -105,13 +103,10 @@ namespace LzLeague.Data.Migrations
 
                     b.Property<int>("ArticleId");
 
-                    b.Property<string>("AuthorId")
-                        .IsRequired();
+                    b.Property<string>("AuthorId");
 
                     b.Property<string>("Content")
                         .IsRequired();
-
-                    b.Property<DateTime>("PublicationDate");
 
                     b.HasKey("Id");
 
@@ -127,8 +122,6 @@ namespace LzLeague.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("MatchesPlayed");
 
                     b.Property<string>("Name");
 
@@ -212,16 +205,6 @@ namespace LzLeague.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("GuessedElTeams");
-
-                    b.Property<int>("GuessedGroupWinners");
-
-                    b.Property<int>("GuessedResults");
-
-                    b.Property<int>("GuessedScores");
-
-                    b.Property<int>("GuessedSecondPlaces");
-
                     b.Property<string>("OwnerId")
                         .IsRequired();
 
@@ -241,10 +224,6 @@ namespace LzLeague.Data.Migrations
 
                     b.Property<int>("Draws");
 
-                    b.Property<int>("GoalsReceived");
-
-                    b.Property<int>("GoalsScored");
-
                     b.Property<int>("GroupId");
 
                     b.Property<string>("ImageUrl");
@@ -253,6 +232,8 @@ namespace LzLeague.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired();
+
+                    b.Property<int>("PlayedMatchesCount");
 
                     b.Property<int>("Points");
 
@@ -386,8 +367,7 @@ namespace LzLeague.Data.Migrations
 
                     b.HasOne("LzLeague.Models.ApplicationUser", "Author")
                         .WithMany()
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("AuthorId");
                 });
 
             modelBuilder.Entity("LzLeague.Models.GroupWinnerPrediction", b =>

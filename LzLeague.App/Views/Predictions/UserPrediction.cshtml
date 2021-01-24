@@ -14,44 +14,14 @@
             </div>
             <div id="success-msg-user-prediction" class="alert alert-success" style="display: none">
             </div>
-            @{
-                var matchDays = Model.MatchesResults
-                    .Select(x => x.Match.Date)
-                    .Distinct()
-                    .ToList();
-
-                var countForDay = 8; // 8
-                var start = 0;
-                var end = countForDay;
-
-                <div id="match-results">
-                    @for (int i = 0; i < matchDays.Count(); i++)
-                    {
-
-                    <div class="card shadow-lg" style="margin-top: 40px">
-                        <div class="card-header">
-                            <h5>@matchDays[i].Value.ToString("dd/MM/yyyy")</h5>
-                        </div>
-                        @for (int j = start; j < end; j++)
-                        {
-                            <div class="card-body">
-                                @Html.DisplayFor(m => Model.MatchesResults[j])
-                            </div>
-                        }
-                    </div>
-                    start += countForDay;
-                    end += countForDay;
-                    }
+            <div class="card shadow-lg">
+                <div class="card-header">
+                    <h5>Matches Results</h5>
                 </div>
-            }
-            @*<div class="card shadow-lg">
-                    <div class="card-header">
-                        <h5>Matches Results</h5>
-                    </div>
-                    <div class="card-body" id="match-results">
-                        @Html.DisplayFor(model => model.MatchesResults)
-                    </div>
-                </div>*@
+                <div class="card-body" id="match-results">
+                    @Html.DisplayFor(model => model.MatchesResults)
+                </div>
+            </div>
         </div>
     </div>
     <div class="row page-content">
@@ -81,8 +51,7 @@
         let successMsg = '@TempData["SuccessMsg"]';
         displayMsg(successMsg, 'success-msg-user-prediction');
 
-        let groupsBody = $('#groups-winners')[0];
-        console.log(groupsBody);
+        let groupsBody = $('div.card-body').toArray()[1];
         let formGroups = $(groupsBody).find('div.form-group');
         let groupsIds = $(formGroups).find('input[name=GroupId]').toArray();
         let previousSelectedOption;
@@ -141,7 +110,7 @@
                 .filter(el => $(el).attr('name') !== $(this).attr('name'));
 
             $(selectElementsToChange).each(function(index, element) {
-
+                
                 let currentSelect = $(element);
                 $(currentSelect).find('option[value="' + currentSelectedOption + '"]').hide();
                 $(currentSelect).find('option[value="' + $(previousSelectedOption).val() + '"]').show();

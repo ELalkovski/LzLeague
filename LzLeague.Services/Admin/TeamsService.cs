@@ -92,12 +92,14 @@
         }
 
         public async Task UpdateTeamsStatistics
-            (Team homeTeam,
-            Team awayTeam,
+            (string homeTeamName,
+            string awayTeamName,
             string score,
             string result,
             Group group)
         {
+            var homeTeam = await this.GetTeamByName(homeTeamName);
+            var awayTeam = await this.GetTeamByName(awayTeamName);
             var goalsArgs = score
                 .Split(":", StringSplitOptions.RemoveEmptyEntries)
                 .Select(int.Parse)
@@ -136,8 +138,8 @@
 
         public async Task EditTeamsStatistics(Match match, string score, string result)
         {
-            var homeTeam = match.HomeTeam;
-            var awayTeam = match.AwayTeam;
+            var homeTeam = await this.GetTeamByName(match.HomeTeam);
+            var awayTeam = await this.GetTeamByName(match.AwayTeam);
             var newGoalsArgs = score
                 .Split(":", StringSplitOptions.RemoveEmptyEntries)
                 .Select(int.Parse)
@@ -229,8 +231,7 @@
         {
             return await this.db
                 .Teams
-                .Include(t => t.HomePlayedMatches)
-                .Include(t => t.AwayPlayedMatches)
+                .Include(t => t.PlayedMatches)
                 .FirstOrDefaultAsync(t => t.Name == name.Trim());
         }
 
@@ -241,8 +242,6 @@
                 .Include(t => t.Group)
                 .ThenInclude(g => g.Teams)
                 .Include(t => t.PlayedMatches)
-<<<<<<< .mine
-                .Include(t => t.AwayPlayedMatches)
 =======
 
 >>>>>>> .theirs
