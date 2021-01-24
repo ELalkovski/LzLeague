@@ -8,6 +8,8 @@
     {
         Task Create(Article article);
 
+        Task Update(Article article);
+
         Task CreateComment(Comment comment);
 
         ICollection<Article> GetAll();

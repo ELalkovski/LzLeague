@@ -15,7 +15,6 @@
 
         public DateTime PublicationDate { get; set; }
 
-        [Required]
         public string Content { get; set; }
     }
 }

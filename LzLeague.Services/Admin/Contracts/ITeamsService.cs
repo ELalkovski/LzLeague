@@ -9,6 +9,8 @@
     {
         Task CreateGroup(Group group);
 
+        Task UpdateTeam(Team team);
+
         ICollection<Group> GetAllGroups();
 
         Task<ICollection<Team>> GetAllTeams();
