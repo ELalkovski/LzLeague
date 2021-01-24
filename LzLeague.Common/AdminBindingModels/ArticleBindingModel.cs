@@ -2,10 +2,16 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using LzLeague.Models;
 
     public class ArticleBindingModel
     {
+        public ArticleBindingModel()
+        {
+            this.CreateCommentModel = new CreateCommentBindingModel();
+            this.CreateCommentModel.Content = "";
+            this.Comments = new List<CommentBindingModel>();
+        }
+
         public int Id { get; set; }
 
         [Required]
