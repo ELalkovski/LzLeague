@@ -51,34 +51,6 @@
             return this.RedirectToAction("Index", "Home");
         }
 
-        [HttpGet]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Edit(int id)
-        {
-            var article = await this._as.GetArticle(id);
-            var model = this.mapper.Map<ArticleBindingModel>(article);
-
-            return this.View(model);
-        }
-
-        [HttpPost]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Edit(ArticleBindingModel model)
-        {
-            if (!this.ModelState.IsValid)
-            {
-                var errors = ModelState.Values.SelectMany(v => v.Errors);
-                return this.View(model);
-            }
-
-            var article = this.mapper.Map<ArticleBindingModel, Article>(model);
-
-            await this._as.Update(article);
-            this.TempData["SuccessMsg"] = "Article has been created successfully.";
-
-            return this.RedirectToAction("Index", "Home");
-        }
-
         [HttpPost]
         [Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> AddComment(CreateCommentBindingModel model)

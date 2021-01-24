@@ -30,7 +30,6 @@
             this._signInManager = signInManager;
             this._logger = logger;
             this._emailSender = emailSender;
-            this.Input = new RegisterInputModel();
         }
 
         [BindProperty]

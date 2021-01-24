@@ -240,8 +240,12 @@
                 .Teams
                 .Include(t => t.Group)
                 .ThenInclude(g => g.Teams)
-                .Include(t => t.HomePlayedMatches)
+                .Include(t => t.PlayedMatches)
+<<<<<<< .mine
                 .Include(t => t.AwayPlayedMatches)
+=======
+
+>>>>>>> .theirs
                 .FirstOrDefaultAsync(t => t.Id == teamId);
         }
 

@@ -52,7 +52,12 @@
                 .AddEntityFrameworkStores<LzLeagueContext>();
 
 
-            services.AddAuthentication();
+            services.AddAuthentication()
+                .AddFacebook(options =>
+                {
+                    options.AppId = this.Configuration.GetSection("ExternalAuthentication:Facebook:AppId").Value;
+                    options.AppSecret = this.Configuration.GetSection("ExternalAuthentication:Facebook:AppSecret").Value;
+                });
 
             services.Configure<IdentityOptions>(options =>
             {

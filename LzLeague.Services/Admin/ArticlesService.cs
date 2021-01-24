@@ -23,12 +23,6 @@
             await this.db.SaveChangesAsync();
         }
 
-        public async Task Update(Article article)
-        {
-            this.db.Articles.Update(article);
-            await this.db.SaveChangesAsync();
-        }
-
         public async Task CreateComment(Comment comment)
         {
             this.db.Comments.Add(comment);
@@ -61,10 +55,8 @@
         {
             var article = await this.db
                 .Articles
-                .AsNoTracking()
                 .Include(a => a.Comments)
                 .ThenInclude(c => c.Author)
-                .AsNoTracking()
                 .FirstOrDefaultAsync(a => a.Id == id);
 
             return article;

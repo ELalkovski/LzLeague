@@ -6,11 +6,6 @@
 
     public class TeamBindingModel
     {
-        public TeamBindingModel()
-        {
-            this.Group = new GroupBindingModel();
-            this.PlayedMatches = new List<Match>();
-        }
         public int Id { get; set; }
 
         [Required]

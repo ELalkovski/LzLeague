@@ -47,20 +47,14 @@
                     <a class="btn btn-danger float-md-right" style="color: white" data-toggle="modal" data-target="#modal-delete-team">
                         Delete Team
                     </a>
-                    <a asp-area="Admin"
-                       asp-controller="Teams"
-                       asp-action="Edit"
-                       asp-route-id="@Model.Id" class="btn btn-warning float-md-right" style="color: white; margin-right: 10px">
-                        Edit Team
-                    </a>
                 }
                 @if (User.IsInRole("Admin"))
                 {
-                    <a asp-area="Admin"
-                       asp-controller="Teams"
-                       asp-action="MovePositionUp"
-                       asp-route-teamId="@Model.Id"
-                       asp-route-groupId="@Model.GroupId" class="btn btn-warning float-md-right" style="color: white; margin-right: 10px">
+                    <a asp-area="Admin" 
+                       asp-controller="Teams" 
+                       asp-action="MovePositionUp"  
+                       asp-route-teamId="@Model.Id" 
+                       asp-route-groupId="@Model.GroupId" class="btn btn-warning float-md-right" style="color: white">
                         Move Position Up
                     </a>
                     <a class="btn btn-danger float-md-right" style="color: white; margin-right: 10px" data-toggle="modal" data-target="#modal-remove-team-points">
